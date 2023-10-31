@@ -28,7 +28,7 @@
 int t1 = 100, t2 = 1000, t3 = 100, t4 = 100;
 int shared_value = 0;
 
-
+char message[10];
 
 
 
@@ -74,8 +74,15 @@ void SetupThread(int prio, pthread_attr_t *attr, struct sched_param *param){    
 
 }
 
-//timer test for interrupt 
 
+void parser_mqueue(){
+
+
+
+}
+
+
+//timer test for interrupt 
 timer_t timer_id;
 
 void timerCallback(union sigval sv) {

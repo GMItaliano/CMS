@@ -1,7 +1,10 @@
 #include "daemon.h"
 
-#define MQ_NAME "SENSORS_MQ"
-#define MQ_MAXSIZE 10
+#include <string.h>
+#include <cerrno>
+
+#define MQ_NAME "/MSGQUEUE_SENSORS"
+#define MQ_MAXSIZE 50
 #define MQ_MAXMSGS 5
 
 
@@ -32,8 +35,9 @@ daemon::daemon(){
     attr.mq_curmsgs = 0;
 
     //create msg queue
-    msgqueue = mq_open(MQ_NAME, O_CREAT | O_RDWR, 0666, &attr);
-    if(msgqueue == )
+    msgqueue = mq_open(MQ_NAME, O_CREAT | O_WRONLY, 0666, &attr);		//create the msg queue with write only 
+    if(msgqueue == (mqd_t)-1)
+		perror("mq_open");
 
 
 }
@@ -47,10 +51,36 @@ daemon::~daemon(){
 //---- main functions ----
 
 void daemon::run(){
+	//do sensors activation
+
+
+	while(!SIGTERM){			
+
+		if(SIGUSR1 == 1)		
+			isr_control(SIGUSR1);
+		else if(SIGUSR2 == 1)
+			isr_control(SIGUSR2);
+
+	}
 
 }
 
 void daemon::stop(){
+
+}
+
+void daemon::set_flags(int type, bool value){			//conreol the flags of the sensors
+
+	switch(type){
+		case 1: 
+			door_flag = value;
+			break;
+		case 2:
+			motion_flag = value;
+			break;
+		default:					
+			break;
+	}
 
 }
 
@@ -64,17 +94,43 @@ void daemon::stop(){
 #define MOTIONMSG 	"Mtrig"		//motion triggered
 #define BUTTONMSG	"Btrig"		//button triggered
 
-void daemon::door_isr(){		
+unsigned int prio = 0; 			// Low prio  -> 0 < 1 < 2 <- High prio
 
-	
+void daemon::door_isr(){			//Mid msg Queue Priority	
 
-}
-
-void daemon::motion_isr(){
+	if(mq_send(msgqueue, DOORMSG, strlen(DOORMSG)+1, 1));
 
 }
 
-void daemon::button_isr(){
+void daemon::motion_isr(){			//Low msg Queue Priority
+
+	if(mq_send(msgqueue, MOTIONMSG, strlen(MOTIONMSG)+1, 0));
+
+}
+
+void daemon::button_isr(){			//Highest msg Queue Priority
+
+	if(mq_send(msgqueue, BUTTONMSG, strlen(BUTTONMSG)+1, 2));
+
+}
+
+void daemon::isr_control(int control){
+
+	switch(control){
+		case SIGUSR1:					//Daemon signal that will control the button trigger as is the one with the highest priority
+			daemon::button_isr();
+		break;
+		case SIGUSR2:					//daemon signal responsile to control the trigger of both the motion sensor and door sensor
+
+			if(door_flag)
+				daemon::door_isr();
+			else if(motion_flag)
+				daemon::motion_isr();
+
+		break;
+		default:
+		break;
+	}
 
 }
 

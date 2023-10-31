@@ -25,12 +25,15 @@ class daemon{
     //button_sys button;
 
     //Flags
-    
+    bool door_flag = 0;
+    bool motion_flag = 0;
 
     //daemon sensor interrupts
     void door_isr();
     void motion_isr();
-    vood button_isr();
+    void button_isr();
+
+    void isr_control(int);
 
     public:
 
@@ -39,6 +42,8 @@ class daemon{
 
     void run();
     void stop();
+
+    void set_flags(int, bool);
 };
 
 #endif DAEMON_H

@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "house_system.h"
-#include "daemon.h"
 
 int main(){
 

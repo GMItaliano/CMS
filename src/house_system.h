@@ -9,6 +9,7 @@
 #include <sched.h>
 #include <errno.h>
 #include <unistd.h>
+#include <mqueue.h>
 
 //subsystems Classes
 //#include "camera_sys.h"
@@ -36,6 +37,7 @@ class houseSystem{
     bool control_flag = 0;
 
     pthread_t thread1, thread2, thread3, thread4;
+    mqd_t msgqueue;
 
     //thread functions
     static void *tupdateFlags(void* );
