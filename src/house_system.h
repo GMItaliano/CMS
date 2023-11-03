@@ -10,35 +10,60 @@
 #include <errno.h>
 #include <unistd.h>
 #include <mqueue.h>
+#include <signal.h>
 
 //subsystems Classes
-//#include "camera_sys.h"
-//#include "microphone_sys.h"
 //#include "speaker_sys.h"
 //#include "relay_sys.h"
 //#include "livestream_ctrl.h"
 //#include "database_sys.h"
 
+
+//message queue organization
+#define MQ_NAME "/MSGQUEUE_SENSORS"
+#define MQ_MAXSIZE 50
+#define MQ_MAXMSGS 5
+
+struct sinp_flags{
+    //struct for the sensor flags
+    bool motion, door, button;
+};
+
 class houseSystem{
     private:
 
-    //camera_sys camera;
-    //microphone_sys microphone;
     //speaker_sys speaker;
     //relay_sys relay;
     //livestream_ctrl livestream;
     //database_sys database;
-    pthread_cond_t cvsensors;
-    pthread_mutex_t mutdata;
-    pthread_mutex_t mutsensors; //= PTHREAD_MUTEX_INITIALIZER 
+    
+    //signals
+    struct sigevent sig_ev;
 
-    //create 1 thread and add conformingly or create already 4 threads one fors each task
+    //Mutexes
+    pthread_mutex_t mutdata;    //mutex for tupdateflags
+    pthread_mutex_t mutrelay;   //mutex for trelay
+    pthread_mutex_t mutsensors; //mutex for tsensors
 
+    //Condition variables
+    pthread_cond_t cvsensors;   //condition var for tsensors
+    pthread_cond_t cvrelay;     //condirion var for trelay
+
+    //FLAGS
+    sinp_flags house_sen;
+    bool sensors = 0;
+    bool relay = 0;
     bool control_flag = 0;
 
-    pthread_t thread1, thread2, thread3, thread4;
-    mqd_t msgqueue;
 
+    //message queue organization
+    mqd_t msgqueue;
+    char data[MQ_MAXSIZE];
+    unsigned int prio;
+
+    //create 1 thread and add conformingly or create already 4 threads one fors each task
+    pthread_t thread1, thread2, thread3, thread4;
+    
     //thread functions
     static void *tupdateFlags(void* );
     static void *tstream(void* );

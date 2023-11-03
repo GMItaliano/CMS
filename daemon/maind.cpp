@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <syslogs.h>
 #include <sys/types.h> 
 #include <sys/stat.h>
@@ -19,23 +20,23 @@ int main(){
 	pid = fork(); // create a new process
 
 	if (pid < 0) { // on error exit
-		perror("fork");
+		std::perror("fork");
 	exit(EXIT_FAILURE);
 	}
 
 	if (pid > 0){  
-		printf("Deamon PID: %d\n", pid);	
+		std::printf("Deamon PID: %d\n", pid);	
 		exit(EXIT_SUCCESS); // parent process (exit)
 	}
 	sid = setsid(); // create a new session
 
 	if (sid < 0) { // on error exit
-		perror("setsid");
+		std::perror("setsid");
 		exit(EXIT_FAILURE);
 	}
 	// make '/' the root directory
 	if (chdir("/") < 0) { // on error exit
-		perror("chdir");
+		std::perror("chdir");
 		exit(EXIT_FAILURE);
 	}
 	umask(0);

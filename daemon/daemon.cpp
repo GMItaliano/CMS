@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include <cerrno>
+#include <cstdio>
 
 #define MQ_NAME "/MSGQUEUE_SENSORS"
 #define MQ_MAXSIZE 50
@@ -37,8 +38,7 @@ daemon::daemon(){
     //create msg queue
     msgqueue = mq_open(MQ_NAME, O_CREAT | O_WRONLY, 0666, &attr);		//create the msg queue with write only 
     if(msgqueue == (mqd_t)-1)
-		perror("mq_open");
-
+		std::perror("mq_open");
 
 }
 
