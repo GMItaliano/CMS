@@ -15,7 +15,7 @@
 //subsystems Classes
 //#include "speaker_sys.h"
 //#include "relay_sys.h"
-//#include "livestream_ctrl.h"
+#include "livestream_ctrl.h"
 //#include "database_sys.h"
 
 
@@ -34,7 +34,7 @@ class houseSystem{
 
     //speaker_sys speaker;
     //relay_sys relay;
-    //livestream_ctrl livestream;
+    livestream_ctrl livestream;
     //database_sys database;
     
     //signals

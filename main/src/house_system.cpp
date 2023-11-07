@@ -1,10 +1,10 @@
 /* ------- TESTS TO DO ------------
-    -> msg queues how they send information
-    -> communication between daemon and main process
-    -> activation of the threads with the new configurations
-    -> finish the parser function after testing the mqueues
-    -> signals activations both in the main process and daemon process
-    -> test if there is any type of conflict when use SIGUSR1 in both processes 
+    -> msg queues how they send information                                         [ ]
+    -> communication between daemon and main process                                [ ]
+    -> activation of the threads with the new configurations                        [ ]
+    -> finish the parser function after testing the mqueues                         [ ]
+    -> signals activations both in the main process and daemon process              [ ]
+    -> test if there is any type of conflict when use SIGUSR1 in both processes     [ ]
 */
 /*  ------ DONE --------
     -> Threads definition and communication between them
@@ -85,15 +85,41 @@ void SetupThread(int prio, pthread_attr_t *attr, struct sched_param *param){    
 
 }
 
-void parser_mqueue(std::string msg, sinp_flags flags){
+void parser_mqueue(sinp_flags flags, mqd_t mq){
     /*
     -> This function is responsible for the parsing of the message queue
+    the message sent is in the form of a string 
     */
+    struct mq_attr attr;
+    int i = 0;
+    //needs to check how many msgs
+    mq_getattr(mq, &attr);
 
+    char msg[attr.mq_maxmsg][attr.mq_msgsize];
+    unsigned int prio[attr.mq_maxmsg];
 
-   for(int i = 0; msg[i] != '\0' ; i++){
+    //get all the messages in mq
+    for(i = 1 ; i<=attr.mq_curmsgs; i++){
+        mq_receive(mq,msg[i-1],sizeof(msg[i-1]),&prio[i-1]);
 
-   }
+        switch(msg[i-1][0]){
+            case 'M':               //case motion triggered
+                flags.motion = 1;
+                break;
+            case 'D':               //case door triggered
+                flags.door = 1;
+                break;  
+            case 'B':               //case button pressed
+                flags.button = 1;
+                break;
+            default:
+                flags.button = 0;
+                flags.door = 0;
+                flags.motion = 0;
+                break;
+        }
+    }
+
 
 }
 
@@ -105,12 +131,11 @@ void timerCallback(union sigval sv) {
     // Perform your desired actions here
 }
 
-
 //-----------------------------------------------
 
 //-----CONSTRUCTOR & DESTRUCTOR-------
 
-houseSystem::houseSystem(){
+houseSystem::houseSystem() : livestream(0){
     int status[NUMTHREADS], i;
 
     //SIGNAL creation 
@@ -262,13 +287,17 @@ void* houseSystem::tupdateFlags(void* arg){
         pthread_cond_wait(&instance -> cvrelay, &instance -> mutdata);
 
     if(instance -> sensors){                //update flags to the database
+        //send to database flags
+        //clean flags
 
     }else if(instance -> relay){            //updates the flag and call the trelay
         pthread_cond_signal(&instance -> cvrelay);
-        instance -> relay = 1;      //WRONG!!! IT NEEDS TO BE UPDATED CONFORMING THE DATABASE!!!!!!!
+        //instance -> relay = 1;      //WRONG!!! IT NEEDS TO BE UPDATED CONFORMING THE DATABASE!!!!!!!
     }else{                                  //prints something for debug
 
     }
+
+    
 
     pthread_mutex_unlock(&instance -> mutdata);
 
@@ -284,6 +313,8 @@ void* houseSystem::tstream(void* arg){
 
     std::cout << " 2 Stream in" << std::endl;
     houseSystem* instance = static_cast<houseSystem*>(arg);
+
+    instance->livestream.start_livestream();
     
     //------TEST-------
     // while(t2>0){
@@ -326,7 +357,7 @@ void* houseSystem::tsensors(void* arg){
 
         std::cout << instance -> data << std::endl;
 
-        parser_mqueue(instance -> data , instance -> house_sen);
+        parser_mqueue(instance -> house_sen, instance ->msgqueue);
 
         pthread_cond_signal(&instance -> cvsensors);
 

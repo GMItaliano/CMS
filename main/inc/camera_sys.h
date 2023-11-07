@@ -5,6 +5,14 @@
 #include <ctime>
 #include <string>
 
+#include<opencv2/opencv.hpp>//OpenCV header to use VideoCapture class//
+
+using namespace cv;
+
+//---- DEVICES ----
+// 0 -> PC camera
+// X -> RASP (Don't know yet)
+
 class camera_sys{
 
     private:
@@ -14,12 +22,15 @@ class camera_sys{
 
         std::string t_now;
 
+        int device;
+        Mat frame;
+        VideoCapture cap;
 
     public:
-        camera_sys();
+        camera_sys(int);
         ~camera_sys();
 
-        void record_video();
+        void record_video(bool);
         void configure(int, int);
 
 };

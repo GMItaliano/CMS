@@ -1,5 +1,5 @@
 #include <cstdio>
-#include <syslogs.h>
+#include <syslog.h>
 #include <sys/types.h> 
 #include <sys/stat.h>
 #include <unistd.h> 
@@ -15,7 +15,7 @@
 int main(){
     
     pid_t pid, sid;
-	const time_t time;
+	const time_t current_time = time(nullptr);
 
 	pid = fork(); // create a new process
 
@@ -44,7 +44,7 @@ int main(){
 	close(STDOUT_FILENO); // close standard output file descriptor
 	close(STDERR_FILENO); // close standard error file descriptor
 
-	daemon dprocess;
+	Cdaemon dprocess;
     dprocess.run();
 
 exit(EXIT_SUCCESS);
