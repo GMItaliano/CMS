@@ -27,7 +27,7 @@ void signal_handler(int sig) {
 
 //----Constructor & Destructor----
 
-daemon::daemon(){
+Cdaemon::Cdaemon(){
 
     //message queues initialization attributes
     attr.mq_flags = 0;
@@ -42,7 +42,7 @@ daemon::daemon(){
 
 }
 
-daemon::~daemon(){
+Cdaemon::~Cdaemon(){
 
 }
 
@@ -50,7 +50,7 @@ daemon::~daemon(){
 
 //---- main functions ----
 
-void daemon::run(){
+void Cdaemon::run(){
 	//do sensors activation
 
 
@@ -65,11 +65,11 @@ void daemon::run(){
 
 }
 
-void daemon::stop(){
+void Cdaemon::stop(){
 
 }
 
-void daemon::set_flags(int type, bool value){			//conreol the flags of the sensors
+void Cdaemon::set_flags(int type, bool value){			//conreol the flags of the sensors
 
 	switch(type){
 		case 1: 
@@ -96,36 +96,36 @@ void daemon::set_flags(int type, bool value){			//conreol the flags of the senso
 
 unsigned int prio = 0; 			// Low prio  -> 0 < 1 < 2 <- High prio
 
-void daemon::door_isr(){			//Mid msg Queue Priority	
+void Cdaemon::door_isr(){			//Mid msg Queue Priority	
 
 	if(mq_send(msgqueue, DOORMSG, strlen(DOORMSG)+1, 1));
 
 }
 
-void daemon::motion_isr(){			//Low msg Queue Priority
+void Cdaemon::motion_isr(){			//Low msg Queue Priority
 
 	if(mq_send(msgqueue, MOTIONMSG, strlen(MOTIONMSG)+1, 0));
 
 }
 
-void daemon::button_isr(){			//Highest msg Queue Priority
+void Cdaemon::button_isr(){			//Highest msg Queue Priority
 
 	if(mq_send(msgqueue, BUTTONMSG, strlen(BUTTONMSG)+1, 2));
 
 }
 
-void daemon::isr_control(int control){
+void Cdaemon::isr_control(int control){
 
 	switch(control){
 		case SIGUSR1:					//Daemon signal that will control the button trigger as is the one with the highest priority
-			daemon::button_isr();
+			Cdaemon::button_isr();
 		break;
 		case SIGUSR2:					//daemon signal responsile to control the trigger of both the motion sensor and door sensor
 
 			if(door_flag)
-				daemon::door_isr();
+				Cdaemon::door_isr();
 			else if(motion_flag)
-				daemon::motion_isr();
+				Cdaemon::motion_isr();
 
 		break;
 		default:

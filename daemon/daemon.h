@@ -19,7 +19,7 @@
 #include "motion_sys.h"
 
 
-class daemon{
+class Cdaemon{
     private:
 
     mqd_t msgqueue;
@@ -41,8 +41,8 @@ class daemon{
 
     public:
 
-    daemon();
-    ~daemon();
+    Cdaemon();
+    ~Cdaemon();
 
     void run();
     void stop();

@@ -314,7 +314,7 @@ void* houseSystem::tstream(void* arg){
     std::cout << " 2 Stream in" << std::endl;
     houseSystem* instance = static_cast<houseSystem*>(arg);
 
-    instance->livestream.start_livestream();
+    //instance->livestream.start_livestream();
     
     //------TEST-------
     // while(t2>0){
