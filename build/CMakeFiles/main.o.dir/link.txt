@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/main.o.dir/main/main.cpp.o CMakeFiles/main.o.dir/main/src/house_system.cpp.o -o ../main.o 

@@ -1,0 +1,4 @@
+/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles/main.o.dir
+/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles/daemon.o.dir
+/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles/edit_cache.dir
+/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles/rebuild_cache.dir

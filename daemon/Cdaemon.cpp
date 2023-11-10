@@ -1,4 +1,4 @@
-#include "daemon.h"
+#include "Cdaemon.h"
 
 #include <string.h>
 #include <cerrno>
@@ -8,6 +8,7 @@
 #define MQ_MAXSIZE 50
 #define MQ_MAXMSGS 5
 
+static int count = 0;
 
 //---- Other Functions ----
 
@@ -29,6 +30,8 @@ void signal_handler(int sig) {
 
 Cdaemon::Cdaemon(){
 
+	//mq_unlink(MQ_NAME);
+
     //message queues initialization attributes
     attr.mq_flags = 0;
     attr.mq_maxmsg = MQ_MAXMSGS;
@@ -43,7 +46,7 @@ Cdaemon::Cdaemon(){
 }
 
 Cdaemon::~Cdaemon(){
-
+	mq_unlink(MQ_NAME);
 }
 
 //--------------------------------
@@ -53,7 +56,19 @@ Cdaemon::~Cdaemon(){
 void Cdaemon::run(){
 	//do sensors activation
 
+	char* msg[3] = {"Mtrig", "Dtrig", "Btrig"};
+	unsigned int prio = 0;
 
+	while(count < 3){
+		mq_send(msgqueue, msg[count], sizeof(msg), prio);
+		sleep(10);
+		count++;
+	}
+
+	mq_close(msgqueue);
+	//mq_unlink(MQ_NAME);
+
+	/*
 	while(!SIGTERM){			
 
 		if(SIGUSR1 == 1)		
@@ -62,7 +77,7 @@ void Cdaemon::run(){
 			isr_control(SIGUSR2);
 
 	}
-
+	*/
 }
 
 void Cdaemon::stop(){
@@ -118,15 +133,15 @@ void Cdaemon::isr_control(int control){
 
 	switch(control){
 		case SIGUSR1:					//Daemon signal that will control the button trigger as is the one with the highest priority
-			Cdaemon::button_isr();
+			//Cdaemon::button_isr();
 		break;
 		case SIGUSR2:					//daemon signal responsile to control the trigger of both the motion sensor and door sensor
 
-			if(door_flag)
-				Cdaemon::door_isr();
-			else if(motion_flag)
-				Cdaemon::motion_isr();
-
+			if(door_flag){
+				//Cdaemon::door_isr();
+			}else if(motion_flag){
+				//Cdaemon::motion_isr();
+			}
 		break;
 		default:
 		break;

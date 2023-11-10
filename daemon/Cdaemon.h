@@ -16,7 +16,7 @@
 #include <signal.h>
 
 //Components
-#include "motion_sys.h"
+//#include "motion_sys.h"
 
 
 class Cdaemon{
@@ -25,7 +25,7 @@ class Cdaemon{
     mqd_t msgqueue;
     struct mq_attr attr;
     //door_sys door;
-    motion_sys motion;
+    //motion_sys motion;
     //button_sys button;
 
     //Flags

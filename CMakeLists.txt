@@ -1,21 +1,30 @@
-cmake_minimum_required(VERSION 3.0)
-project(CMS)
+cmake_minimum_required(VERSION 3.22.1)
+project(CMS_test)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Find OpenCV package
-find_package(OpenCV REQUIRED)
+# Executable directory
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 
-# Find OpenAL package
-find_package(OpenAL REQUIRED)
-
-# Add your source files here
-set(SOURCES
-    house_system.cpp camera_sys.cpp microphone_sys.cpp livestream.cpp
+# Including all include directories
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/main/inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/../inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/daemon/
 )
 
-# Create the executable
-add_executable(CMS_test ${SOURCES})
+# All source files
+# file(GLOB main_SRCS
+#     "${CMAKE_CURRENT_SOURCE_DIR}/main/src/*.cpp"
+# )
 
-# Link OpenCV and OpenAL libraries
-target_link_libraries(CMS_test ${OpenCV_LIBS} ${OPENAL_LIBRARY})
+# Main process
+add_executable(main.o main/main.cpp main/src/house_system.cpp) #${main_SRCS}
 
+# All source files for daemon
+# file(GLOB daemon_SRCS
+#     "${CMAKE_CURRENT_SOURCE_DIR}/daemon/daemon.cpp"
+# )
 
+# Daemon process
+add_executable(daemon.o daemon/maind.cpp daemon/Cdaemon.cpp) #${daemon_SRCS}

@@ -1,29 +1,3 @@
-/* ------- TESTS TO DO ------------
-    -> msg queues how they send information                                         [ ]
-    -> communication between daemon and main process                                [ ]
-    -> activation of the threads with the new configurations                        [ ]
-    -> finish the parser function after testing the mqueues                         [ ]
-    -> signals activations both in the main process and daemon process              [ ]
-    -> test if there is any type of conflict when use SIGUSR1 in both processes     [ ]
-*/
-/*  ------ DONE --------
-    -> Threads definition and communication between them
-    -> all classes created 
-    -> daemon process initialized and almost done
-*/
-/* ------- TO DO --------
-    -> finish all class
-    -> make device drivers
-    -> database implementation (last)
-    -> Establish interrupts for the GPIO pins
-    -> See the necessity for a char device or block device (at the moment don't see any)
-    -> organize the code and classes to \inc file(header) and \src file(.cpp)
-
-    -> make files see how to do them
-    -> how to run daemon
-    -> how to make device drivers
-*/
-
 #include "house_system.h"
 
 #include <string.h>
@@ -39,10 +13,9 @@
 
 //------- GLOBAL VARIABLES --------
 
-int t1 = 100, t2 = 1000, t3 = 100, t4 = 100;
+int count = 0;
 int shared_value = 0;
-
-bool old_relay = 0;
+bool control_relay = 0;
 
 //---------------------------------
 
@@ -85,62 +58,16 @@ void SetupThread(int prio, pthread_attr_t *attr, struct sched_param *param){    
 
 }
 
-void parser_mqueue(sinp_flags flags, mqd_t mq){
-    /*
-    -> This function is responsible for the parsing of the message queue
-    the message sent is in the form of a string 
-    */
-    struct mq_attr attr;
-    int i = 0;
-    //needs to check how many msgs
-    mq_getattr(mq, &attr);
-
-    char msg[attr.mq_maxmsg][attr.mq_msgsize];
-    unsigned int prio[attr.mq_maxmsg];
-
-    //get all the messages in mq
-    for(i = 1 ; i<=attr.mq_curmsgs; i++){
-        mq_receive(mq,msg[i-1],sizeof(msg[i-1]),&prio[i-1]);
-
-        switch(msg[i-1][0]){
-            case 'M':               //case motion triggered
-                flags.motion = 1;
-                break;
-            case 'D':               //case door triggered
-                flags.door = 1;
-                break;  
-            case 'B':               //case button pressed
-                flags.button = 1;
-                break;
-            default:
-                flags.button = 0;
-                flags.door = 0;
-                flags.motion = 0;
-                break;
-        }
-    }
-
-
-}
-
-//timer test for interrupt 
-timer_t timer_id;
-
-void timerCallback(union sigval sv) {
-    std::cout << "Timer interrupt occurred." << std::endl;
-    // Perform your desired actions here
-}
-
 //-----------------------------------------------
 
 //-----CONSTRUCTOR & DESTRUCTOR-------
 
-houseSystem::houseSystem() : livestream(0){
+houseSystem::houseSystem() { //: livestream(0)
     int status[NUMTHREADS], i;
 
     //SIGNAL creation 
-    sig_ev.sigev_notify = SIGEV_SIGNAL;
-    sig_ev.sigev_signo = SIGUSR1;
+    //sig_ev.sigev_notify = SIGEV_SIGNAL;
+    //sig_ev.sigev_signo = SIGUSR1;
 
     //open message queue for reading
     msgqueue = mq_open(MQ_NAME, O_CREAT | O_RDONLY, 0666, nullptr);
@@ -149,19 +76,21 @@ houseSystem::houseSystem() : livestream(0){
         exit(1);
     }
 
+    mq_getattr(msgqueue, &attr_msg);
+
+    /*
     if(mq_notify(msgqueue,&sig_ev)){        //create the signal for notification
         std::perror("mq_notify");
         exit(1);
-    }
+    }*/
 
     //mutexes creation
     pthread_mutex_init(&mutdata, nullptr);
     pthread_mutex_init(&mutsensors, nullptr);
-    //mutdata = PTHREAD_MUTEX_INITIALIZER; 
-    //mutsensors = PTHREAD_MUTEX_INITIALIZER;
-    
+
     //condition varables creation
     pthread_cond_init(&cvsensors, nullptr);
+    pthread_cond_init(&cvrelay, nullptr);
     //cvsensors = PHREAD_COND_INITIALIZER;
 
     //define Priority & Schedulling
@@ -205,11 +134,12 @@ houseSystem::houseSystem() : livestream(0){
 
 
     //test if threads were created and if there were any errors
-    for (i=0; i<NUMTHREADS; i++){
+    for (i=0; i < NUMTHREADS; i++){
         checkFail(status[i], i+1);
+        std::cout << "\nThread created: " << i+1 << std::endl;
     }
         
-    std::cout << "\nThreads created: " << i << std::endl;
+    //std::cout << "\nThreads created: " << i << std::endl;
 }
 
 houseSystem::~houseSystem(){
@@ -229,6 +159,11 @@ houseSystem::~houseSystem(){
 
 //Run() -> main process function all the main process threads will be activated here 
 void houseSystem::run(){
+
+    pthread_join(thread1, NULL);
+    pthread_join(thread2, NULL);
+    pthread_join(thread3, NULL);
+    pthread_join(thread4, NULL);
 
     while(!control_flag);
 
@@ -253,54 +188,28 @@ void* houseSystem::tupdateFlags(void* arg){
     std::cout << " 1 update Flags in" << std::endl;
     houseSystem* instance = static_cast<houseSystem*>(arg);
 
-    // //------TEST-------
-    // while(t1>0){
-    //     t1--;
-    //     std::cout << "TASK 1: Counter -> " << t1 << std::endl;
-    // }
+    bool relay_val = 0;
 
-    // pthread_mutex_lock(&instance -> mutdata);
-    // while (shared_value == 0){
-    //     pthread_cond_wait(&instance -> cvsensors, &instance -> mutdata);
-    // }
-    // pthread_mutex_unlock(&instance -> mutdata);
-
-    // while(shared_value > 0){
-    //     shared_value--;
-    //     std::cout << "TASK 1: SHAREDVALUE -> " << shared_value << std::endl;
-    // }
-
-    // std::cout << "SHARED VALUE FINISHED" << std::endl;
-
-    // //mutex control for shared data -> test 
-    // pthread_mutex_lock(&instance -> mutsensors);
-    // instance->control_flag = 1;
-    // pthread_mutex_unlock(&instance -> mutsensors);
-    // //------TEST-------
-
+    while(instance){
     pthread_mutex_lock(&instance -> mutdata);
 
-    if(!instance -> sensors)
-        pthread_cond_wait(&instance -> cvsensors, &instance -> mutdata);
+    //get relay value from database
 
-    if(!instance -> relay)
-        pthread_cond_wait(&instance -> cvrelay, &instance -> mutdata);
-
-    if(instance -> sensors){                //update flags to the database
-        //send to database flags
-        //clean flags
-
-    }else if(instance -> relay){            //updates the flag and call the trelay
+    if(relay_val != instance->relay){
+        instance->relay = relay_val;
         pthread_cond_signal(&instance -> cvrelay);
-        //instance -> relay = 1;      //WRONG!!! IT NEEDS TO BE UPDATED CONFORMING THE DATABASE!!!!!!!
-    }else{                                  //prints something for debug
-
+        control_relay = 1;
     }
+
+    pthread_cond_wait(&instance -> cvsensors, &instance->mutdata);
 
     
 
-    pthread_mutex_unlock(&instance -> mutdata);
+    std::cout<<"ENTERED UPDATE FLAGS" << std::endl;
 
+    pthread_mutex_unlock(&instance -> mutdata);
+    }
+    
     //pthread_exit(NULL);
 }
 
@@ -315,22 +224,23 @@ void* houseSystem::tstream(void* arg){
     houseSystem* instance = static_cast<houseSystem*>(arg);
 
     //instance->livestream.start_livestream();
-    
-    //------TEST-------
-    // while(t2>0){
-    //     t2--;
-    //     std::cout << "TASK 2: Counter -> " << t2 << std::endl;
 
-    //     //mutex control for shared data -> test
-    //     pthread_mutex_lock(&instance -> mutsensors);
-    //     if (t2 == 100){
-    //         shared_value = 255;
-    //         std::cout << "shared value activated: " << shared_value << std::endl;
-    //         pthread_cond_signal(&instance -> cvsensors);
-    //     }
-    //     pthread_mutex_unlock(&instance -> mutsensors);
-    // }
-    //------TEST-------
+    pthread_mutex_lock(&instance->mutdata);
+    
+    //testing communication
+    if(instance -> sensors){
+        std::cout << "SENSORS READ " << count << std::endl;
+        count++;
+
+        if(count == 3){
+            instance->control_flag = 1;
+        }
+
+        instance->sensors = 0;
+
+    }
+
+    pthread_mutex_unlock(&instance->mutdata);
 
     //pthread_exit(NULL);
 }
@@ -346,28 +256,56 @@ void* houseSystem::tsensors(void* arg){
     houseSystem* instance = static_cast<houseSystem*>(arg);
     std::cout << " 3 Sensors in" << std::endl;
     
-    pthread_mutex_lock(&instance ->mutsensors);
+    ssize_t bytes_received = 0;
+    std::string temp;               //Use as secondary memory for mqueues TEST DONT KNOW
 
-    while(!SIGUSR1);
+    while(instance){
 
-    if(SIGUSR1){
+        pthread_mutex_lock(&instance ->mutsensors);
 
-        ssize_t bytes_received = mq_receive(instance -> msgqueue,instance -> data, sizeof(data), &instance->prio);
-        instance -> data[bytes_received] = '\0';
+        bytes_received = mq_receive(instance->msgqueue, instance->data, sizeof(data), &instance->prio);
+        instance->data[bytes_received] = '\0'; 
 
-        std::cout << instance -> data << std::endl;
+        
 
-        parser_mqueue(instance -> house_sen, instance ->msgqueue);
+        if(instance->attr_msg.mq_curmsgs != 0){
 
-        pthread_cond_signal(&instance -> cvsensors);
+            switch (instance->data[0])
+            {
+            case 'M':               //case motion triggered
+                instance->house_sen.motion = 1;
+                std::cout << "MSG: MOTION DETECTED" << std::endl;
+                break;
+            case 'D':               //case door triggered
+                instance->house_sen.door = 1;
+                std::cout << "MSG: DOOR MOVEMENT" << std::endl;
+                break;  
+            case 'B':               //case button pressed
+                instance->house_sen.button = 1;
+                std::cout << "MSG: BUTTON PRESSED" << std::endl;
+                break;
+            default:
+                instance->house_sen.button = 0;
+                instance->house_sen.door = 0;
+                instance->house_sen.motion = 0;
+                break;
+            }
 
-        instance -> sensors = 1;
+            //UPDATE TO DATABASE
+            instance->control_flag = 1;
+            instance->sensors = 1; //Signal to update flags to database;
+            
+            pthread_cond_signal(&instance->cvsensors);      //notify update_flags
 
-    }
+        }else
+            std::cout << "NO Message Queues" << std::endl;
+
 
     pthread_mutex_unlock(&instance -> mutsensors);
+    }
+
     
-    //pthread_exit(NULL);
+    
 }
 
 void* houseSystem::trelay(void* arg){
@@ -375,21 +313,27 @@ void* houseSystem::trelay(void* arg){
     -> This function is responsible for the enabling and disabling of the relay this function will be interacted
     by the value of its flag in the database
     */
-     houseSystem* instance = static_cast<houseSystem*>(arg);
+    houseSystem* instance = static_cast<houseSystem*>(arg);
     std::cout << " 4 Relay in" << std::endl;
     
-    pthread_mutex_lock(&instance ->mutrelay);
 
-    while(old_relay == instance->relay)
-        pthread_cond_wait(&instance -> cvrelay, &instance -> mutrelay);
+    //CONTROL RELAY
+    while(instance){
+        pthread_mutex_lock(&instance ->mutrelay);    
+        while(!control_relay)
+            pthread_cond_wait(&instance->cvrelay, &instance->mutrelay);
 
-    if(old_relay != instance -> relay){
-        //ACTIVATE OR DEACTIVATE RELAY CONFORMING THE VALUE IN RELAY
-        //RELAY DEVICE DRIVER
-        old_relay = instance-> relay;
+        if(instance->relay && control_relay){    //ACTIVATE RELAY
+            std::cout << "ACTION: RELAY ON" << std::endl;
+
+        }else if(!instance->relay && control_relay){                  //DEACTIVATE RELAY
+            std::cout << "ACTION: RELAY OFF" << std::endl;
+
+        } 
+        control_relay = 0;      
+
+        pthread_mutex_unlock(&instance ->mutrelay);
     }
-
-    pthread_mutex_unlock(&instance ->mutrelay);
     
     //pthread_exit(NULL);
 }

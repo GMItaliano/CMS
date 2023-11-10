@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/daemon.o.dir/daemon/maind.cpp.o CMakeFiles/daemon.o.dir/daemon/Cdaemon.cpp.o -o ../daemon.o 

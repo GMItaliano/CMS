@@ -15,7 +15,7 @@
 //subsystems Classes
 //#include "speaker_sys.h"
 //#include "relay_sys.h"
-#include "livestream_ctrl.h"
+//#include "livestream_ctrl.h"
 //#include "database_sys.h"
 
 
@@ -34,11 +34,11 @@ class houseSystem{
 
     //speaker_sys speaker;
     //relay_sys relay;
-    livestream_ctrl livestream;
+    //livestream_ctrl livestream;
     //database_sys database;
     
     //signals
-    struct sigevent sig_ev;
+    //struct sigevent sig_ev;
 
     //Mutexes
     pthread_mutex_t mutdata;    //mutex for tupdateflags
@@ -47,7 +47,7 @@ class houseSystem{
 
     //Condition variables
     pthread_cond_t cvsensors;   //condition var for tsensors
-    pthread_cond_t cvrelay;     //condirion var for trelay
+    pthread_cond_t cvrelay;     //condition var for trelay
 
     //FLAGS
     sinp_flags house_sen;
@@ -57,6 +57,7 @@ class houseSystem{
 
 
     //message queue organization
+    struct mq_attr attr_msg;
     mqd_t msgqueue;
     char data[MQ_MAXSIZE];
     unsigned int prio;

@@ -10,7 +10,7 @@
 #include <time.h>
 #include <signal.h>
 
-#include "daemon.h"
+#include "Cdaemon.h"
 
 int main(){
     
