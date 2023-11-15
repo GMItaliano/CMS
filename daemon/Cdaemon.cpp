@@ -30,7 +30,7 @@ void signal_handler(int sig) {
 
 Cdaemon::Cdaemon(){
 
-	//mq_unlink(MQ_NAME);
+	mq_unlink(MQ_NAME);
 
     //message queues initialization attributes
     attr.mq_flags = 0;
@@ -57,16 +57,22 @@ void Cdaemon::run(){
 	//do sensors activation
 
 	char* msg[3] = {"Mtrig", "Dtrig", "Btrig"};
+	char* end_msg = "END MESSAGE";
 	unsigned int prio = 0;
 
-	while(count < 3){
-		mq_send(msgqueue, msg[count], sizeof(msg), prio);
-		sleep(10);
-		count++;
+	while(1){
+		if(count < 3){
+			mq_send(msgqueue, msg[count], sizeof(msg), prio);
+			count++;
+		}
+		if(count == 3){
+			count = 0;
+		}
+		sleep(2);
 	}
 
 	mq_close(msgqueue);
-	//mq_unlink(MQ_NAME);
+	mq_unlink(MQ_NAME);
 
 	/*
 	while(!SIGTERM){			

@@ -110,25 +110,25 @@ houseSystem::houseSystem() { //: livestream(0)
 
     //thread creation tupdate flags  -> high Priority
     SetupThread(90,&attr,&param);
-    std::cout << "\t tupdateFlags\n Creating thread at RR/" << param.sched_priority << std::endl;
+    std::cout << "\n\t -> tupdateFlags\n Creating thread at RR/" << param.sched_priority << std::endl;
 	pthread_attr_setinheritsched (&attr, PTHREAD_EXPLICIT_SCHED);
     status[0] = pthread_create(&thread1,&attr, tupdateFlags, this);
 
     //thread creation Stream        -> lowest Priority
     SetupThread(50,&attr,&param);
-    std::cout << "\t tstream \n Creating thread at RR/" << param.sched_priority << std::endl;
+    std::cout << "\n\t -> tstream \n Creating thread at RR/" << param.sched_priority << std::endl;
 	pthread_attr_setinheritsched (&attr, PTHREAD_EXPLICIT_SCHED);
     status[1] = pthread_create(&thread2,&attr, tstream, this);
 
     //thread creation Sensors       -> high Priority
     SetupThread(90,&attr,&param);
-    std::cout << "\t tsensors\n Creating thread at RR/" << param.sched_priority << std::endl;
+    std::cout << "\n\t -> tsensors\n Creating thread at RR/" << param.sched_priority << std::endl;
 	pthread_attr_setinheritsched (&attr, PTHREAD_EXPLICIT_SCHED);
     status[2] = pthread_create(&thread3,&attr, tsensors, this);
 
     //thread creation Relay         -> mid Priority
     SetupThread(70,&attr,&param);
-    std::cout << "\t trelay \n Creating thread at RR/" << param.sched_priority << std::endl;
+    std::cout << "\n\t -> trelay \n Creating thread at RR/" << param.sched_priority << std::endl;
 	pthread_attr_setinheritsched (&attr, PTHREAD_EXPLICIT_SCHED);
     status[3] = pthread_create(&thread4,&attr, trelay, this);
 
@@ -136,7 +136,7 @@ houseSystem::houseSystem() { //: livestream(0)
     //test if threads were created and if there were any errors
     for (i=0; i < NUMTHREADS; i++){
         checkFail(status[i], i+1);
-        std::cout << "\nThread created: " << i+1 << std::endl;
+        std::cout << "\t\t--Thread created: " << i+1 << std::endl;
     }
         
     //std::cout << "\nThreads created: " << i << std::endl;
@@ -172,6 +172,16 @@ void houseSystem::run(){
     if(control_flag)
         std::cout << "FLAG CONTROL WORKS" << std::endl;
 
+    if (mq_close(msgqueue) == -1) {
+        perror("mq_close");
+        exit(EXIT_FAILURE);
+    }
+
+    if (mq_unlink(MQ_NAME) == -1) {
+        perror("mq_unlink");
+        exit(EXIT_FAILURE);
+    }
+
 }
 
 //----------------------
@@ -190,27 +200,31 @@ void* houseSystem::tupdateFlags(void* arg){
 
     bool relay_val = 0;
 
-    while(instance){
-    pthread_mutex_lock(&instance -> mutdata);
+    while(!instance->control_flag){
+        pthread_mutex_lock(&instance -> mutdata);
 
-    //get relay value from database
+        //get relay value from database
 
-    if(relay_val != instance->relay){
-        instance->relay = relay_val;
-        pthread_cond_signal(&instance -> cvrelay);
-        control_relay = 1;
+        sleep(5);
+        std::cout << "UPDATE FLAGS" << std::endl;
+
+        if(relay_val != instance->relay){
+            instance->relay = relay_val;
+            pthread_cond_signal(&instance -> cvrelay);
+            control_relay = 1;
+        }
+
+        pthread_cond_wait(&instance -> cvsensors, &instance->mutdata);
+
+        
+
+        std::cout<<"ENTERED UPDATE FLAGS" << std::endl;
+
+        pthread_mutex_unlock(&instance -> mutdata);
     }
-
-    pthread_cond_wait(&instance -> cvsensors, &instance->mutdata);
-
     
-
-    std::cout<<"ENTERED UPDATE FLAGS" << std::endl;
-
-    pthread_mutex_unlock(&instance -> mutdata);
-    }
-    
-    //pthread_exit(NULL);
+    std::cout << "EXITING THREAD tUF" << std::endl;
+    pthread_exit(NULL);
 }
 
 void* houseSystem::tstream(void* arg){
@@ -225,24 +239,27 @@ void* houseSystem::tstream(void* arg){
 
     //instance->livestream.start_livestream();
 
-    pthread_mutex_lock(&instance->mutdata);
-    
-    //testing communication
-    if(instance -> sensors){
-        std::cout << "SENSORS READ " << count << std::endl;
-        count++;
+    while(instance->control_flag){
+        //testing communication
+        pthread_mutex_lock(&instance->mutdata);
 
-        if(count == 3){
-            instance->control_flag = 1;
-        }
+        sleep(1);
+        std::cout << "\t ::Waiting for SENSORS::" << std::endl;
 
-        instance->sensors = 0;
+        if(instance -> sensors){
+            std::cout << "SENSORS READ " << count << std::endl;
+            count++;
+            instance->sensors = 0;
 
+        } 
+        pthread_mutex_unlock(&instance->mutdata);
     }
+    //testing communication
 
-    pthread_mutex_unlock(&instance->mutdata);
+   
 
-    //pthread_exit(NULL);
+    std::cout << "EXITING THREAD tSTREAM" << std::endl;
+    pthread_exit(NULL);
 }
 
 void* houseSystem::tsensors(void* arg){
@@ -257,18 +274,22 @@ void* houseSystem::tsensors(void* arg){
     std::cout << " 3 Sensors in" << std::endl;
     
     ssize_t bytes_received = 0;
-    std::string temp;               //Use as secondary memory for mqueues TEST DONT KNOW
+    //char* temp[10];               //Use as secondary memory for mqueues TEST DONT KNOW
+    int mq_count = 0;
 
-    while(instance){
+    while(!instance->control_flag){
 
         pthread_mutex_lock(&instance ->mutsensors);
 
         bytes_received = mq_receive(instance->msgqueue, instance->data, sizeof(data), &instance->prio);
         instance->data[bytes_received] = '\0'; 
 
+        std::cout << "MSG Received: " << instance->data << " msg number: " << ++mq_count << std::endl;
         
+        //strcpy(temp[mq_count],instance->data);
+        //std::cout << "::copy MSG Received: " << temp[mq_count] << " msg number: " << mq_count << std::endl;
 
-        if(instance->attr_msg.mq_curmsgs != 0){
+        if(instance->attr_msg.mq_curmsgs != 0){ 
 
             switch (instance->data[0])
             {
@@ -292,19 +313,19 @@ void* houseSystem::tsensors(void* arg){
             }
 
             //UPDATE TO DATABASE
-            instance->control_flag = 1;
             instance->sensors = 1; //Signal to update flags to database;
-            
+            std::cout << "Arrived to sensors!!!" << std::endl;
             pthread_cond_signal(&instance->cvsensors);      //notify update_flags
 
         }else
             std::cout << "NO Message Queues" << std::endl;
 
 
-    pthread_mutex_unlock(&instance -> mutsensors);
+        pthread_mutex_unlock(&instance -> mutsensors);
     }
 
-    
+    std::cout << "EXITING THREAD tSENSORS" << std::endl;
+    pthread_exit(NULL);
     
 }
 
@@ -318,12 +339,16 @@ void* houseSystem::trelay(void* arg){
     
 
     //CONTROL RELAY
-    while(instance){
-        pthread_mutex_lock(&instance ->mutrelay);    
-        while(!control_relay)
-            pthread_cond_wait(&instance->cvrelay, &instance->mutrelay);
+    while(!instance->control_flag){
 
-        if(instance->relay && control_relay){    //ACTIVATE RELAY
+        sleep(3);
+
+        pthread_mutex_lock(&instance ->mutrelay);    
+        if(!control_relay){
+            std::cout << "\t ::Waiting for relay::" << std::endl;
+            //pthread_cond_wait(&instance->cvrelay, &instance->mutrelay);
+
+        }else if(instance->relay && control_relay){    //ACTIVATE RELAY
             std::cout << "ACTION: RELAY ON" << std::endl;
 
         }else if(!instance->relay && control_relay){                  //DEACTIVATE RELAY
@@ -335,6 +360,7 @@ void* houseSystem::trelay(void* arg){
         pthread_mutex_unlock(&instance ->mutrelay);
     }
     
-    //pthread_exit(NULL);
+    std::cout << "EXITING THREAD tRELAY" << std::endl;
+    pthread_exit(NULL);
 }
 
