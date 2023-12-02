@@ -17,6 +17,12 @@ int count = 0;
 int shared_value = 0;
 bool control_relay = 0;
 
+
+bool last_motion = 0;
+bool last_magn = 0;
+bool last_button = 0;
+
+std::string database_data;
 //---------------------------------
 
 //---------- OTHER FUNCTIONS NEEDED -------------
@@ -58,11 +64,78 @@ void SetupThread(int prio, pthread_attr_t *attr, struct sched_param *param){    
 
 }
 
+sinp_flags parser_mqueues(std::string data){
+    
+    sinp_flags s_mq;
+    int count = 0;
+
+    for(int i=0; i < data.size(); i++){
+        if(data[i-1]==':'){
+
+            if(count == 0)
+                s_mq.button = data[i] -'0';
+            else if(count == 1)
+                s_mq.motion = data[i] -'0';
+            else if(count == 2)
+                s_mq.door = data[i] -'0';
+            
+            count++;
+        }
+    }
+
+    std::cout << "---> PARSER MQ: \nButton: " << s_mq.button << "\nMotion: "
+        << s_mq.motion << "\nDoor: " << s_mq.door << std::endl; 
+
+    return s_mq;
+}
+
+sinp_flags parser_database(std::string data){
+    int count = 0;
+    sinp_flags s_data;
+
+    for(int i = 0; data[i] != '\0'; i++){
+        if(data[i-2] == ':' && data[i-1] == ' '){
+            switch (count)
+            {
+            case 0:
+                if(data[i] == 0 || data[i] == 'F')
+                    s_data.button = 0;
+                else    
+                    s_data.button = 1;
+                break;
+            case 1:
+                if(data[i] == 0 || data[i] == 'F')
+                    s_data.door = 0;
+                else    
+                    s_data.door = 1;
+                break;
+            case 2:
+                if(data[i] == 0 || data[i] == 'F')
+                    s_data.motion = 0;
+                else    
+                    s_data.motion = 1;
+                break;
+            case 3:
+                if(data[i] == 0 || data[i] == 'F')
+                    s_data.relay = 0;
+                else    
+                    s_data.relay = 1;
+                break;
+            }
+            count++;
+        }
+    }
+
+    return s_data;
+}
+
+
 //-----------------------------------------------
 
 //-----CONSTRUCTOR & DESTRUCTOR-------
 
 houseSystem::houseSystem() { //: livestream(0)
+
     int status[NUMTHREADS], i;
 
     //SIGNAL creation 
@@ -74,7 +147,8 @@ houseSystem::houseSystem() { //: livestream(0)
     if (msgqueue == (mqd_t)-1) {
         std::perror("mq_open");
         exit(1);
-    }
+    }else   
+        std::cerr << "[Constructor] -> Received MQueues" << std::endl;
 
     mq_getattr(msgqueue, &attr_msg);
 
@@ -110,25 +184,25 @@ houseSystem::houseSystem() { //: livestream(0)
 
     //thread creation tupdate flags  -> high Priority
     SetupThread(90,&attr,&param);
-    std::cout << "\n\t -> tupdateFlags\n Creating thread at RR/" << param.sched_priority << std::endl;
+    std::cout << "\n\t [Constructor] -> tupdateFlags\n Creating thread at RR/" << param.sched_priority << std::endl;
 	pthread_attr_setinheritsched (&attr, PTHREAD_EXPLICIT_SCHED);
     status[0] = pthread_create(&thread1,&attr, tupdateFlags, this);
 
     //thread creation Stream        -> lowest Priority
     SetupThread(50,&attr,&param);
-    std::cout << "\n\t -> tstream \n Creating thread at RR/" << param.sched_priority << std::endl;
+    std::cout << "\n\t [Constructor] -> tstream \n Creating thread at RR/" << param.sched_priority << std::endl;
 	pthread_attr_setinheritsched (&attr, PTHREAD_EXPLICIT_SCHED);
     status[1] = pthread_create(&thread2,&attr, tstream, this);
 
     //thread creation Sensors       -> high Priority
     SetupThread(90,&attr,&param);
-    std::cout << "\n\t -> tsensors\n Creating thread at RR/" << param.sched_priority << std::endl;
+    std::cout << "\n\t [Constructor] -> tsensors\n Creating thread at RR/" << param.sched_priority << std::endl;
 	pthread_attr_setinheritsched (&attr, PTHREAD_EXPLICIT_SCHED);
     status[2] = pthread_create(&thread3,&attr, tsensors, this);
 
     //thread creation Relay         -> mid Priority
     SetupThread(70,&attr,&param);
-    std::cout << "\n\t -> trelay \n Creating thread at RR/" << param.sched_priority << std::endl;
+    std::cout << "\n\t [Constructor] -> trelay \n Creating thread at RR/" << param.sched_priority << std::endl;
 	pthread_attr_setinheritsched (&attr, PTHREAD_EXPLICIT_SCHED);
     status[3] = pthread_create(&thread4,&attr, trelay, this);
 
@@ -136,7 +210,7 @@ houseSystem::houseSystem() { //: livestream(0)
     //test if threads were created and if there were any errors
     for (i=0; i < NUMTHREADS; i++){
         checkFail(status[i], i+1);
-        std::cout << "\t\t--Thread created: " << i+1 << std::endl;
+        std::cout << "\t\t[Constructor] -> Thread created: " << i+1 << std::endl;
     }
         
     //std::cout << "\nThreads created: " << i << std::endl;
@@ -151,6 +225,8 @@ houseSystem::~houseSystem(){
     pthread_cond_destroy(&cvsensors);
 
     mq_close(msgqueue);
+
+    database.~database_sys();
     
 }
 
@@ -160,10 +236,12 @@ houseSystem::~houseSystem(){
 //Run() -> main process function all the main process threads will be activated here 
 void houseSystem::run(){
 
+    /*
     pthread_join(thread1, NULL);
     pthread_join(thread2, NULL);
     pthread_join(thread3, NULL);
     pthread_join(thread4, NULL);
+    */
 
     while(!control_flag);
 
@@ -198,27 +276,51 @@ void* houseSystem::tupdateFlags(void* arg){
     std::cout << " 1 update Flags in" << std::endl;
     houseSystem* instance = static_cast<houseSystem*>(arg);
 
-    bool relay_val = 0;
-
     while(!instance->control_flag){
         pthread_mutex_lock(&instance -> mutdata);
-
-        //get relay value from database
-
-        sleep(5);
-        std::cout << "UPDATE FLAGS" << std::endl;
-
-        if(relay_val != instance->relay){
-            instance->relay = relay_val;
-            pthread_cond_signal(&instance -> cvrelay);
-            control_relay = 1;
-        }
-
-        pthread_cond_wait(&instance -> cvsensors, &instance->mutdata);
-
         
+        
+        //check for relay activation
+        sleep(1);
 
-        std::cout<<"ENTERED UPDATE FLAGS" << std::endl;
+        if((database_data = instance->database.receive_data("/Notifications")) != ""){
+            
+            std::cout << "\t > Read from database: " << database_data << std::endl;
+            instance->database_sen = parser_database(database_data);
+
+            // -> check for variations
+            //check if the value of the button differs from the database
+            if(instance->database_sen.relay != instance->house_sen.relay){
+                //update databasse with the value read from the sensor
+                instance->house_sen.relay = instance->database_sen.relay;
+                control_relay = 1;
+                pthread_cond_signal(&instance->cvrelay);
+
+            }
+        }
+        
+        //check for condition signal tSensors because sensors were updated
+        if(!instance->sensors)
+            pthread_cond_wait(&instance->cvsensors, &instance->mutdata);
+        else{
+            
+            std::cout << "\t::Updating Sensor Values to Database::" << std::endl;
+
+            if(instance->database_sen.button != instance->house_sen.button){
+                instance->database.flags_update(0, (instance->house_sen.button == 0 ? false : true));
+                std::cout << "Updating BUTTON to Database with value " << instance->house_sen.button << std::endl;
+            }
+            if(instance->database_sen.motion != instance->house_sen.motion){
+                instance->database.flags_update(1, (instance->house_sen.motion == 0 ? false : true));
+                std::cout << "Updating MOTION to Database with value " << instance->house_sen.motion << std::endl;
+            }
+            if(instance->database_sen.door != instance->house_sen.door){
+                instance->database.flags_update(2, (instance->house_sen.door == 0 ? false : true));
+                std::cout << "Updating MAGNETIC to Database with value " << instance->house_sen.door << std::endl;
+            }
+
+            instance->sensors = 0;
+        }
 
         pthread_mutex_unlock(&instance -> mutdata);
     }
@@ -279,46 +381,66 @@ void* houseSystem::tsensors(void* arg){
 
     while(!instance->control_flag){
 
+        sleep(1);
         pthread_mutex_lock(&instance ->mutsensors);
 
         bytes_received = mq_receive(instance->msgqueue, instance->data, sizeof(data), &instance->prio);
         instance->data[bytes_received] = '\0'; 
-
-        std::cout << "MSG Received: " << instance->data << " msg number: " << ++mq_count << std::endl;
+        if(bytes_received != NULL)
+            std::cout << "MSG Received: " << instance->data << " msg number: " << ++mq_count << std::endl;
         
         //strcpy(temp[mq_count],instance->data);
         //std::cout << "::copy MSG Received: " << temp[mq_count] << " msg number: " << mq_count << std::endl;
 
         if(instance->attr_msg.mq_curmsgs != 0){ 
 
-            switch (instance->data[0])
-            {
-            case 'M':               //case motion triggered
-                instance->house_sen.motion = 1;
-                std::cout << "MSG: MOTION DETECTED" << std::endl;
-                break;
-            case 'D':               //case door triggered
-                instance->house_sen.door = 1;
-                std::cout << "MSG: DOOR MOVEMENT" << std::endl;
-                break;  
-            case 'B':               //case button pressed
-                instance->house_sen.button = 1;
-                std::cout << "MSG: BUTTON PRESSED" << std::endl;
-                break;
-            default:
-                instance->house_sen.button = 0;
-                instance->house_sen.door = 0;
-                instance->house_sen.motion = 0;
-                break;
-            }
+
+            instance->house_sen = parser_mqueues(instance->data);
 
             //UPDATE TO DATABASE
             instance->sensors = 1; //Signal to update flags to database;
             std::cout << "Arrived to sensors!!!" << std::endl;
             pthread_cond_signal(&instance->cvsensors);      //notify update_flags
 
-        }else
-            std::cout << "NO Message Queues" << std::endl;
+        }
+ 
+        //     switch (instance->data[0])
+        //     {
+        //     case 'M':               //case motion triggered
+        //         instance->house_sen.motion = 1;
+
+        //         instance->house_sen.button = 0;
+        //         instance->house_sen.door = 0;
+        //         std::cout << "MSG: MOTION DETECTED" << std::endl;
+        //         break;
+        //     case 'D':               //case door triggered
+        //         instance->house_sen.door = 1;
+
+        //         instance->house_sen.button = 0;
+        //         instance->house_sen.motion = 0;
+        //         std::cout << "MSG: DOOR MOVEMENT" << std::endl;
+        //         break;  
+        //     case 'B':               //case button pressed
+        //         instance->house_sen.button = 1;
+                
+        //         instance->house_sen.door = 0;
+        //         instance->house_sen.motion = 0;
+        //         std::cout << "MSG: BUTTON PRESSED" << std::endl;
+        //         break;
+        //     default:
+        //         instance->house_sen.button = 0;
+        //         instance->house_sen.door = 0;
+        //         instance->house_sen.motion = 0;
+        //         break;
+        //     }
+
+        //     //UPDATE TO DATABASE
+        //     instance->sensors = 1; //Signal to update flags to database;
+        //     std::cout << "Arrived to sensors!!!" << std::endl;
+        //     pthread_cond_signal(&instance->cvsensors);      //notify update_flags
+
+        // }else
+        //     std::cout << "NO Message Queues" << std::endl;
 
 
         pthread_mutex_unlock(&instance -> mutsensors);
@@ -344,17 +466,14 @@ void* houseSystem::trelay(void* arg){
         sleep(3);
 
         pthread_mutex_lock(&instance ->mutrelay);    
-        if(!control_relay){
-            std::cout << "\t ::Waiting for relay::" << std::endl;
-            //pthread_cond_wait(&instance->cvrelay, &instance->mutrelay);
+        
+        while(!control_relay)
+            pthread_cond_wait(&instance->cvrelay, &instance->mutrelay);
 
-        }else if(instance->relay && control_relay){    //ACTIVATE RELAY
-            std::cout << "ACTION: RELAY ON" << std::endl;
+        //call Relay device driver
 
-        }else if(!instance->relay && control_relay){                  //DEACTIVATE RELAY
-            std::cout << "ACTION: RELAY OFF" << std::endl;
+        std::cout << "--> Relay at value: " << instance->house_sen.relay << std::endl;
 
-        } 
         control_relay = 0;      
 
         pthread_mutex_unlock(&instance ->mutrelay);

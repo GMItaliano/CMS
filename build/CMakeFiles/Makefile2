@@ -63,7 +63,7 @@ CMAKE_BINARY_DIR = /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/main.o.dir/all
+all: CMakeFiles/test.dir/all
 all: CMakeFiles/daemon.o.dir/all
 .PHONY : all
 
@@ -72,35 +72,35 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/main.o.dir/clean
+clean: CMakeFiles/test.dir/clean
 clean: CMakeFiles/daemon.o.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/main.o.dir
+# Target rules for target CMakeFiles/test.dir
 
 # All Build rule for target.
-CMakeFiles/main.o.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.o.dir/build.make CMakeFiles/main.o.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.o.dir/build.make CMakeFiles/main.o.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles --progress-num=4,5,6 "Built target main.o"
-.PHONY : CMakeFiles/main.o.dir/all
+CMakeFiles/test.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles --progress-num=4,5,6,7 "Built target test"
+.PHONY : CMakeFiles/test.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/main.o.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles 3
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/main.o.dir/all
+CMakeFiles/test.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles 4
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles 0
-.PHONY : CMakeFiles/main.o.dir/rule
+.PHONY : CMakeFiles/test.dir/rule
 
 # Convenience name for target.
-main.o: CMakeFiles/main.o.dir/rule
-.PHONY : main.o
+test: CMakeFiles/test.dir/rule
+.PHONY : test
 
 # clean rule for target.
-CMakeFiles/main.o.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.o.dir/build.make CMakeFiles/main.o.dir/clean
-.PHONY : CMakeFiles/main.o.dir/clean
+CMakeFiles/test.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/clean
+.PHONY : CMakeFiles/test.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/daemon.o.dir

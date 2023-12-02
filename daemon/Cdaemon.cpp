@@ -1,6 +1,6 @@
 #include "Cdaemon.h"
 
-#include <string.h>
+#include <string>
 #include <cerrno>
 #include <cstdio>
 
@@ -56,19 +56,19 @@ Cdaemon::~Cdaemon(){
 void Cdaemon::run(){
 	//do sensors activation
 
-	char* msg[3] = {"Mtrig", "Dtrig", "Btrig"};
-	char* end_msg = "END MESSAGE";
+	char* msg[4] = {"B:1 M:1 D:0", "B:0 M:0 D:0", "B:0 M:0 D:1", "B:0 M:1 D:0"};
+	//char* end_msg = "END MESSAGE";
 	unsigned int prio = 0;
 
 	while(1){
-		if(count < 3){
+		if(count < 4){
 			mq_send(msgqueue, msg[count], sizeof(msg), prio);
 			count++;
 		}
-		if(count == 3){
+		if(count == 4){
 			count = 0;
 		}
-		sleep(2);
+		sleep(5);
 	}
 
 	mq_close(msgqueue);

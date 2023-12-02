@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/main/inc -I/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/../inc -I/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/daemon
+CXX_INCLUDES = -I/usr/include/python3.10 -I/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/main/inc
 
-CXX_FLAGS = -std=gnu++11
+CXX_FLAGS = -g -g -std=gnu++11
 

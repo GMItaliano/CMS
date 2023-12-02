@@ -50,4 +50,4 @@ class Cdaemon{
     void set_flags(int, bool);
 };
 
-#endif DAEMON_H
+#endif 

@@ -1,0 +1,1 @@
+/usr/bin/c++ -g -g CMakeFiles/test.dir/main/main.cpp.o CMakeFiles/test.dir/main/src/house_system.cpp.o CMakeFiles/test.dir/main/src/database_sys.cpp.o -o ../test  /usr/lib/x86_64-linux-gnu/libpython3.10.so 

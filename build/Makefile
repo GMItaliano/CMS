@@ -117,17 +117,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named main.o
+# Target rules for targets named test
 
 # Build rule for target.
-main.o: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 main.o
-.PHONY : main.o
+test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test
+.PHONY : test
 
 # fast build rule for target.
-main.o/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.o.dir/build.make CMakeFiles/main.o.dir/build
-.PHONY : main.o/fast
+test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
+.PHONY : test/fast
 
 #=============================================================================
 # Target rules for targets named daemon.o
@@ -195,7 +195,7 @@ main/main.o: main/main.cpp.o
 
 # target to build an object file
 main/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.o.dir/build.make CMakeFiles/main.o.dir/main/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/main.cpp.o
 .PHONY : main/main.cpp.o
 
 main/main.i: main/main.cpp.i
@@ -203,7 +203,7 @@ main/main.i: main/main.cpp.i
 
 # target to preprocess a source file
 main/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.o.dir/build.make CMakeFiles/main.o.dir/main/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/main.cpp.i
 .PHONY : main/main.cpp.i
 
 main/main.s: main/main.cpp.s
@@ -211,15 +211,39 @@ main/main.s: main/main.cpp.s
 
 # target to generate assembly for a file
 main/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.o.dir/build.make CMakeFiles/main.o.dir/main/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/main.cpp.s
 .PHONY : main/main.cpp.s
+
+main/src/database_sys.o: main/src/database_sys.cpp.o
+.PHONY : main/src/database_sys.o
+
+# target to build an object file
+main/src/database_sys.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/src/database_sys.cpp.o
+.PHONY : main/src/database_sys.cpp.o
+
+main/src/database_sys.i: main/src/database_sys.cpp.i
+.PHONY : main/src/database_sys.i
+
+# target to preprocess a source file
+main/src/database_sys.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/src/database_sys.cpp.i
+.PHONY : main/src/database_sys.cpp.i
+
+main/src/database_sys.s: main/src/database_sys.cpp.s
+.PHONY : main/src/database_sys.s
+
+# target to generate assembly for a file
+main/src/database_sys.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/src/database_sys.cpp.s
+.PHONY : main/src/database_sys.cpp.s
 
 main/src/house_system.o: main/src/house_system.cpp.o
 .PHONY : main/src/house_system.o
 
 # target to build an object file
 main/src/house_system.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.o.dir/build.make CMakeFiles/main.o.dir/main/src/house_system.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/src/house_system.cpp.o
 .PHONY : main/src/house_system.cpp.o
 
 main/src/house_system.i: main/src/house_system.cpp.i
@@ -227,7 +251,7 @@ main/src/house_system.i: main/src/house_system.cpp.i
 
 # target to preprocess a source file
 main/src/house_system.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.o.dir/build.make CMakeFiles/main.o.dir/main/src/house_system.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/src/house_system.cpp.i
 .PHONY : main/src/house_system.cpp.i
 
 main/src/house_system.s: main/src/house_system.cpp.s
@@ -235,7 +259,7 @@ main/src/house_system.s: main/src/house_system.cpp.s
 
 # target to generate assembly for a file
 main/src/house_system.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.o.dir/build.make CMakeFiles/main.o.dir/main/src/house_system.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/src/house_system.cpp.s
 .PHONY : main/src/house_system.cpp.s
 
 # Help Target
@@ -247,7 +271,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... daemon.o"
-	@echo "... main.o"
+	@echo "... test"
 	@echo "... daemon/Cdaemon.o"
 	@echo "... daemon/Cdaemon.i"
 	@echo "... daemon/Cdaemon.s"
@@ -257,6 +281,9 @@ help:
 	@echo "... main/main.o"
 	@echo "... main/main.i"
 	@echo "... main/main.s"
+	@echo "... main/src/database_sys.o"
+	@echo "... main/src/database_sys.i"
+	@echo "... main/src/database_sys.s"
 	@echo "... main/src/house_system.o"
 	@echo "... main/src/house_system.i"
 	@echo "... main/src/house_system.s"

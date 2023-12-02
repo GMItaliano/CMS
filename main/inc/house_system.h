@@ -16,7 +16,7 @@
 //#include "speaker_sys.h"
 //#include "relay_sys.h"
 //#include "livestream_ctrl.h"
-//#include "database_sys.h"
+#include "database_sys.h"
 
 
 //message queue organization
@@ -26,7 +26,7 @@
 
 struct sinp_flags{
     //struct for the sensor flags
-    bool motion, door, button;
+    bool motion, door, button, relay;
 };
 
 class houseSystem{
@@ -35,7 +35,7 @@ class houseSystem{
     //speaker_sys speaker;
     //relay_sys relay;
     //livestream_ctrl livestream;
-    //database_sys database;
+    database_sys database;
     
     //signals
     //struct sigevent sig_ev;
@@ -51,8 +51,10 @@ class houseSystem{
 
     //FLAGS
     sinp_flags house_sen;
+    sinp_flags database_sen;
+
     bool sensors = 0;
-    bool relay = 0;
+    //bool relay = 0;
     bool control_flag = 0;
 
 
@@ -80,4 +82,4 @@ class houseSystem{
 
 };
 
-#endif HOUSE_SYSTEM_H
+#endif 

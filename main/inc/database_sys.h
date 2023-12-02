@@ -2,22 +2,29 @@
 #define DATABASE_SYS_H
 
 #include <string>
+#include <iostream>
+#include <python3.10/Python.h>
+#include <filesystem>
+//#include "house_system.h"
+
 
 class database_sys{
     private:
-        std::string path;
-        std::string link_database;
+        
+        PyObject *pModule; 
+        //PyObject *fsendData, *freceiveData, *finnitDatabase, *fresult, *fupdatefData;
+        //std::string pID; 
     
     public:
 
         database_sys();
         ~database_sys();
 
-        void send_data(std::string, std::string);
-        void receive_data(std::string);
-
-        void flags_update(int, bool);           //not final only an idea
-
+        void send_data(const std::string& path, const std::string& key, const std::string& value);
+        std::string receive_data(const std::string& path);
+        void flags_update(int type, bool state);
+        //const char* read_flags();
+        //void update_logs()
 };
 
-#endif DATABASE_SYS_H
+#endif

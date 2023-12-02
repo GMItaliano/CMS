@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "../main.o.pdb"
   "CMakeFiles/main.o.dir/main/main.cpp.o"
   "CMakeFiles/main.o.dir/main/main.cpp.o.d"
+  "CMakeFiles/main.o.dir/main/src/database_sys.cpp.o"
+  "CMakeFiles/main.o.dir/main/src/database_sys.cpp.o.d"
   "CMakeFiles/main.o.dir/main/src/house_system.cpp.o"
   "CMakeFiles/main.o.dir/main/src/house_system.cpp.o.d"
 )
