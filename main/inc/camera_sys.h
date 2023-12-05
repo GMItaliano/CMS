@@ -35,4 +35,4 @@ class camera_sys{
 
 };
 
-#endif __CAMERA_SYS_H__
+#endif 

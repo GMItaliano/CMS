@@ -138,10 +138,6 @@ houseSystem::houseSystem() { //: livestream(0)
 
     int status[NUMTHREADS], i;
 
-    //SIGNAL creation 
-    //sig_ev.sigev_notify = SIGEV_SIGNAL;
-    //sig_ev.sigev_signo = SIGUSR1;
-
     //open message queue for reading
     msgqueue = mq_open(MQ_NAME, O_CREAT | O_RDONLY, 0666, nullptr);
     if (msgqueue == (mqd_t)-1) {
@@ -403,44 +399,6 @@ void* houseSystem::tsensors(void* arg){
             pthread_cond_signal(&instance->cvsensors);      //notify update_flags
 
         }
- 
-        //     switch (instance->data[0])
-        //     {
-        //     case 'M':               //case motion triggered
-        //         instance->house_sen.motion = 1;
-
-        //         instance->house_sen.button = 0;
-        //         instance->house_sen.door = 0;
-        //         std::cout << "MSG: MOTION DETECTED" << std::endl;
-        //         break;
-        //     case 'D':               //case door triggered
-        //         instance->house_sen.door = 1;
-
-        //         instance->house_sen.button = 0;
-        //         instance->house_sen.motion = 0;
-        //         std::cout << "MSG: DOOR MOVEMENT" << std::endl;
-        //         break;  
-        //     case 'B':               //case button pressed
-        //         instance->house_sen.button = 1;
-                
-        //         instance->house_sen.door = 0;
-        //         instance->house_sen.motion = 0;
-        //         std::cout << "MSG: BUTTON PRESSED" << std::endl;
-        //         break;
-        //     default:
-        //         instance->house_sen.button = 0;
-        //         instance->house_sen.door = 0;
-        //         instance->house_sen.motion = 0;
-        //         break;
-        //     }
-
-        //     //UPDATE TO DATABASE
-        //     instance->sensors = 1; //Signal to update flags to database;
-        //     std::cout << "Arrived to sensors!!!" << std::endl;
-        //     pthread_cond_signal(&instance->cvsensors);      //notify update_flags
-
-        // }else
-        //     std::cout << "NO Message Queues" << std::endl;
 
 
         pthread_mutex_unlock(&instance -> mutsensors);

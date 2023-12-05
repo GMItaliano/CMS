@@ -138,10 +138,10 @@ void Cdaemon::button_isr(){			//Highest msg Queue Priority
 void Cdaemon::isr_control(int control){
 
 	switch(control){
-		case SIGUSR1:					//Daemon signal that will control the button trigger as is the one with the highest priority
+		case SIGUSR2:					//Daemon signal that will control the button trigger as is the one with the highest priority
 			//Cdaemon::button_isr();
 		break;
-		case SIGUSR2:					//daemon signal responsile to control the trigger of both the motion sensor and door sensor
+		case SIGUSR1:					//daemon signal responsile to control the trigger of both the motion sensor and door sensor
 
 			if(door_flag){
 				//Cdaemon::door_isr();

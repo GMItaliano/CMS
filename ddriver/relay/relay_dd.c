@@ -116,8 +116,8 @@ static int __init relayModule_init(void) {
 	}
 
 
-	//s_pGpioRegisters = (struct GpioRegisters *)ioremap(GPIO_BASE, sizeof(struct GpioRegisters));
-	s_pGpioRegisters = (struct GpioRegisters *)ioremap_nocache(GPIO_BASE, sizeof(struct GpioRegisters));
+	s_pGpioRegisters = (struct GpioRegisters *)ioremap(GPIO_BASE, sizeof(struct GpioRegisters));
+	//s_pGpioRegisters = (struct GpioRegisters *)ioremap_nocache(GPIO_BASE, sizeof(struct GpioRegisters));
 	
 	pr_alert("map to virtual adresse: 0x%x\n", (unsigned)s_pGpioRegisters);
 	

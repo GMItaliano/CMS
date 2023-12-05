@@ -18,16 +18,14 @@ database_sys::database_sys() {
     // Append the Python script directory to the path
     std::string PythonPath = std::string(buffer) + "/main/src";
 
-    // Set the Python path
+    //Set path
     setenv("PYTHONPATH", PythonPath.c_str(), 1);
 
     pythonPath = std::getenv("PYTHONPATH");
     std::cout << "PYTHONPATH: " << (pythonPath ? pythonPath : "not set") << std::endl;
 
-    // Initialize Python
     Py_Initialize();
 
-    // Import the module
     pModule = PyImport_ImportModule("py_database");
     
 
@@ -80,6 +78,7 @@ void database_sys::send_data(const std::string& path, const std::string& key, co
 }
 
 std::string database_sys::receive_data(const std::string& path) {
+    
     if (this->pModule != nullptr) {
         PyObject* pReceiveData = PyObject_GetAttrString(this->pModule, "get_data_path");
 
@@ -110,7 +109,7 @@ std::string database_sys::receive_data(const std::string& path) {
         }
     }
 
-    return "";  // Return an empty string on error
+    return "";  
 }
 
 void database_sys::flags_update(int type, bool state) {
