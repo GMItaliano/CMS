@@ -117,37 +117,37 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test
+# Target rules for targets named mainlocal.elf
 
 # Build rule for target.
-test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test
-.PHONY : test
+mainlocal.elf: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mainlocal.elf
+.PHONY : mainlocal.elf
 
 # fast build rule for target.
-test/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
-.PHONY : test/fast
+mainlocal.elf/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/build
+.PHONY : mainlocal.elf/fast
 
 #=============================================================================
-# Target rules for targets named daemon.o
+# Target rules for targets named daemon.elf
 
 # Build rule for target.
-daemon.o: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 daemon.o
-.PHONY : daemon.o
+daemon.elf: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 daemon.elf
+.PHONY : daemon.elf
 
 # fast build rule for target.
-daemon.o/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.o.dir/build.make CMakeFiles/daemon.o.dir/build
-.PHONY : daemon.o/fast
+daemon.elf/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/build
+.PHONY : daemon.elf/fast
 
 daemon/Cdaemon.o: daemon/Cdaemon.cpp.o
 .PHONY : daemon/Cdaemon.o
 
 # target to build an object file
 daemon/Cdaemon.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.o.dir/build.make CMakeFiles/daemon.o.dir/daemon/Cdaemon.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/Cdaemon.cpp.o
 .PHONY : daemon/Cdaemon.cpp.o
 
 daemon/Cdaemon.i: daemon/Cdaemon.cpp.i
@@ -155,7 +155,7 @@ daemon/Cdaemon.i: daemon/Cdaemon.cpp.i
 
 # target to preprocess a source file
 daemon/Cdaemon.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.o.dir/build.make CMakeFiles/daemon.o.dir/daemon/Cdaemon.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/Cdaemon.cpp.i
 .PHONY : daemon/Cdaemon.cpp.i
 
 daemon/Cdaemon.s: daemon/Cdaemon.cpp.s
@@ -163,15 +163,87 @@ daemon/Cdaemon.s: daemon/Cdaemon.cpp.s
 
 # target to generate assembly for a file
 daemon/Cdaemon.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.o.dir/build.make CMakeFiles/daemon.o.dir/daemon/Cdaemon.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/Cdaemon.cpp.s
 .PHONY : daemon/Cdaemon.cpp.s
+
+daemon/button_sys.o: daemon/button_sys.cpp.o
+.PHONY : daemon/button_sys.o
+
+# target to build an object file
+daemon/button_sys.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/button_sys.cpp.o
+.PHONY : daemon/button_sys.cpp.o
+
+daemon/button_sys.i: daemon/button_sys.cpp.i
+.PHONY : daemon/button_sys.i
+
+# target to preprocess a source file
+daemon/button_sys.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/button_sys.cpp.i
+.PHONY : daemon/button_sys.cpp.i
+
+daemon/button_sys.s: daemon/button_sys.cpp.s
+.PHONY : daemon/button_sys.s
+
+# target to generate assembly for a file
+daemon/button_sys.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/button_sys.cpp.s
+.PHONY : daemon/button_sys.cpp.s
+
+daemon/data_errors.o: daemon/data_errors.cpp.o
+.PHONY : daemon/data_errors.o
+
+# target to build an object file
+daemon/data_errors.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/data_errors.cpp.o
+.PHONY : daemon/data_errors.cpp.o
+
+daemon/data_errors.i: daemon/data_errors.cpp.i
+.PHONY : daemon/data_errors.i
+
+# target to preprocess a source file
+daemon/data_errors.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/data_errors.cpp.i
+.PHONY : daemon/data_errors.cpp.i
+
+daemon/data_errors.s: daemon/data_errors.cpp.s
+.PHONY : daemon/data_errors.s
+
+# target to generate assembly for a file
+daemon/data_errors.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/data_errors.cpp.s
+.PHONY : daemon/data_errors.cpp.s
+
+daemon/door_sys.o: daemon/door_sys.cpp.o
+.PHONY : daemon/door_sys.o
+
+# target to build an object file
+daemon/door_sys.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/door_sys.cpp.o
+.PHONY : daemon/door_sys.cpp.o
+
+daemon/door_sys.i: daemon/door_sys.cpp.i
+.PHONY : daemon/door_sys.i
+
+# target to preprocess a source file
+daemon/door_sys.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/door_sys.cpp.i
+.PHONY : daemon/door_sys.cpp.i
+
+daemon/door_sys.s: daemon/door_sys.cpp.s
+.PHONY : daemon/door_sys.s
+
+# target to generate assembly for a file
+daemon/door_sys.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/door_sys.cpp.s
+.PHONY : daemon/door_sys.cpp.s
 
 daemon/maind.o: daemon/maind.cpp.o
 .PHONY : daemon/maind.o
 
 # target to build an object file
 daemon/maind.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.o.dir/build.make CMakeFiles/daemon.o.dir/daemon/maind.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/maind.cpp.o
 .PHONY : daemon/maind.cpp.o
 
 daemon/maind.i: daemon/maind.cpp.i
@@ -179,7 +251,7 @@ daemon/maind.i: daemon/maind.cpp.i
 
 # target to preprocess a source file
 daemon/maind.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.o.dir/build.make CMakeFiles/daemon.o.dir/daemon/maind.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/maind.cpp.i
 .PHONY : daemon/maind.cpp.i
 
 daemon/maind.s: daemon/maind.cpp.s
@@ -187,15 +259,39 @@ daemon/maind.s: daemon/maind.cpp.s
 
 # target to generate assembly for a file
 daemon/maind.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.o.dir/build.make CMakeFiles/daemon.o.dir/daemon/maind.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/maind.cpp.s
 .PHONY : daemon/maind.cpp.s
+
+daemon/motion_sys.o: daemon/motion_sys.cpp.o
+.PHONY : daemon/motion_sys.o
+
+# target to build an object file
+daemon/motion_sys.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/motion_sys.cpp.o
+.PHONY : daemon/motion_sys.cpp.o
+
+daemon/motion_sys.i: daemon/motion_sys.cpp.i
+.PHONY : daemon/motion_sys.i
+
+# target to preprocess a source file
+daemon/motion_sys.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/motion_sys.cpp.i
+.PHONY : daemon/motion_sys.cpp.i
+
+daemon/motion_sys.s: daemon/motion_sys.cpp.s
+.PHONY : daemon/motion_sys.s
+
+# target to generate assembly for a file
+daemon/motion_sys.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/daemon/motion_sys.cpp.s
+.PHONY : daemon/motion_sys.cpp.s
 
 main/main.o: main/main.cpp.o
 .PHONY : main/main.o
 
 # target to build an object file
 main/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/main/main.cpp.o
 .PHONY : main/main.cpp.o
 
 main/main.i: main/main.cpp.i
@@ -203,7 +299,7 @@ main/main.i: main/main.cpp.i
 
 # target to preprocess a source file
 main/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/main/main.cpp.i
 .PHONY : main/main.cpp.i
 
 main/main.s: main/main.cpp.s
@@ -211,7 +307,7 @@ main/main.s: main/main.cpp.s
 
 # target to generate assembly for a file
 main/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/main/main.cpp.s
 .PHONY : main/main.cpp.s
 
 main/src/database_sys.o: main/src/database_sys.cpp.o
@@ -219,7 +315,7 @@ main/src/database_sys.o: main/src/database_sys.cpp.o
 
 # target to build an object file
 main/src/database_sys.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/src/database_sys.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/main/src/database_sys.cpp.o
 .PHONY : main/src/database_sys.cpp.o
 
 main/src/database_sys.i: main/src/database_sys.cpp.i
@@ -227,7 +323,7 @@ main/src/database_sys.i: main/src/database_sys.cpp.i
 
 # target to preprocess a source file
 main/src/database_sys.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/src/database_sys.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/main/src/database_sys.cpp.i
 .PHONY : main/src/database_sys.cpp.i
 
 main/src/database_sys.s: main/src/database_sys.cpp.s
@@ -235,7 +331,7 @@ main/src/database_sys.s: main/src/database_sys.cpp.s
 
 # target to generate assembly for a file
 main/src/database_sys.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/src/database_sys.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/main/src/database_sys.cpp.s
 .PHONY : main/src/database_sys.cpp.s
 
 main/src/house_system.o: main/src/house_system.cpp.o
@@ -243,7 +339,7 @@ main/src/house_system.o: main/src/house_system.cpp.o
 
 # target to build an object file
 main/src/house_system.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/src/house_system.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/main/src/house_system.cpp.o
 .PHONY : main/src/house_system.cpp.o
 
 main/src/house_system.i: main/src/house_system.cpp.i
@@ -251,7 +347,7 @@ main/src/house_system.i: main/src/house_system.cpp.i
 
 # target to preprocess a source file
 main/src/house_system.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/src/house_system.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/main/src/house_system.cpp.i
 .PHONY : main/src/house_system.cpp.i
 
 main/src/house_system.s: main/src/house_system.cpp.s
@@ -259,8 +355,56 @@ main/src/house_system.s: main/src/house_system.cpp.s
 
 # target to generate assembly for a file
 main/src/house_system.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/src/house_system.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/main/src/house_system.cpp.s
 .PHONY : main/src/house_system.cpp.s
+
+main/src/livestream_ctrl.o: main/src/livestream_ctrl.cpp.o
+.PHONY : main/src/livestream_ctrl.o
+
+# target to build an object file
+main/src/livestream_ctrl.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/main/src/livestream_ctrl.cpp.o
+.PHONY : main/src/livestream_ctrl.cpp.o
+
+main/src/livestream_ctrl.i: main/src/livestream_ctrl.cpp.i
+.PHONY : main/src/livestream_ctrl.i
+
+# target to preprocess a source file
+main/src/livestream_ctrl.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/main/src/livestream_ctrl.cpp.i
+.PHONY : main/src/livestream_ctrl.cpp.i
+
+main/src/livestream_ctrl.s: main/src/livestream_ctrl.cpp.s
+.PHONY : main/src/livestream_ctrl.s
+
+# target to generate assembly for a file
+main/src/livestream_ctrl.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/main/src/livestream_ctrl.cpp.s
+.PHONY : main/src/livestream_ctrl.cpp.s
+
+main/src/relay_sys.o: main/src/relay_sys.cpp.o
+.PHONY : main/src/relay_sys.o
+
+# target to build an object file
+main/src/relay_sys.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/main/src/relay_sys.cpp.o
+.PHONY : main/src/relay_sys.cpp.o
+
+main/src/relay_sys.i: main/src/relay_sys.cpp.i
+.PHONY : main/src/relay_sys.i
+
+# target to preprocess a source file
+main/src/relay_sys.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/main/src/relay_sys.cpp.i
+.PHONY : main/src/relay_sys.cpp.i
+
+main/src/relay_sys.s: main/src/relay_sys.cpp.s
+.PHONY : main/src/relay_sys.s
+
+# target to generate assembly for a file
+main/src/relay_sys.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/main/src/relay_sys.cpp.s
+.PHONY : main/src/relay_sys.cpp.s
 
 # Help Target
 help:
@@ -270,14 +414,26 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... daemon.o"
-	@echo "... test"
+	@echo "... daemon.elf"
+	@echo "... mainlocal.elf"
 	@echo "... daemon/Cdaemon.o"
 	@echo "... daemon/Cdaemon.i"
 	@echo "... daemon/Cdaemon.s"
+	@echo "... daemon/button_sys.o"
+	@echo "... daemon/button_sys.i"
+	@echo "... daemon/button_sys.s"
+	@echo "... daemon/data_errors.o"
+	@echo "... daemon/data_errors.i"
+	@echo "... daemon/data_errors.s"
+	@echo "... daemon/door_sys.o"
+	@echo "... daemon/door_sys.i"
+	@echo "... daemon/door_sys.s"
 	@echo "... daemon/maind.o"
 	@echo "... daemon/maind.i"
 	@echo "... daemon/maind.s"
+	@echo "... daemon/motion_sys.o"
+	@echo "... daemon/motion_sys.i"
+	@echo "... daemon/motion_sys.s"
 	@echo "... main/main.o"
 	@echo "... main/main.i"
 	@echo "... main/main.s"
@@ -287,6 +443,12 @@ help:
 	@echo "... main/src/house_system.o"
 	@echo "... main/src/house_system.i"
 	@echo "... main/src/house_system.s"
+	@echo "... main/src/livestream_ctrl.o"
+	@echo "... main/src/livestream_ctrl.i"
+	@echo "... main/src/livestream_ctrl.s"
+	@echo "... main/src/relay_sys.o"
+	@echo "... main/src/relay_sys.i"
+	@echo "... main/src/relay_sys.s"
 .PHONY : help
 
 

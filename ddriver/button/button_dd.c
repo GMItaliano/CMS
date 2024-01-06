@@ -37,6 +37,7 @@ unsigned long old_jiffie = 0;
 
 #endif // !EN_DEBOUNCE
 
+//static struct siginfo info;
 static struct kernel_siginfo info;
 static pid_t pid;
 static struct task_struct *task = NULL;
@@ -46,8 +47,10 @@ static struct class *dev_class = NULL;
 static struct cdev c_dev;  // Character device structure
 
 struct GpioRegisters *s_pGpioRegisters;
-static unsigned int pinNum = 17;
+static unsigned int pinNum = 21;
 static unsigned int irqNumber;
+
+unsigned long int previousPinVal = 0;
 
 static int __init button_driver_init(void);
 static void __exit button_driver_exit(void);
@@ -65,7 +68,7 @@ static irqreturn_t irq_handler(int irq, void *dev_id)
 #ifdef EN_DEBOUNCE
 	unsigned long diff = jiffies - old_jiffie;
 
-	if (diff < 200)
+	if (diff < 100)
 	{
 		return IRQ_HANDLED;
 	}
@@ -73,11 +76,14 @@ static irqreturn_t irq_handler(int irq, void *dev_id)
 	old_jiffie = jiffies;
 #endif
 
-	printk(KERN_INFO "[BUTTON] Interruption handler: PIN -> %d.\n", pinVal);
+	//Sending signal to app
 	info.si_signo = SIGH;
 	info.si_code = SI_QUEUE;
-	info.si_int = pinVal;
+	info.si_int = 10;
+
  	
+	printk(KERN_INFO "[BUTTON] Interruption handler: PIN -> %d --> signal Info: %d.\n", pinVal, info.si_int);
+
  	task = pid_task(find_pid_ns(pid, &init_pid_ns), PIDTYPE_PID);
 	
 	if(task != NULL)
@@ -190,7 +196,7 @@ static int __init button_driver_init(void)
 		class_destroy(dev_class);
 		unregister_chrdev_region(dev,1);
 	}
-    
+
     s_pGpioRegisters = (struct GpioRegisters *)ioremap(GPIO_BASE, sizeof(struct GpioRegisters));
 	SetGPIOFunction(s_pGpioRegisters, pinNum, GPIO_INPUT);
 

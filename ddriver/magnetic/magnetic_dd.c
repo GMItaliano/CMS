@@ -46,7 +46,7 @@ static struct class *dev_class = NULL;
 static struct cdev c_dev; // Character device structure
 
 struct GpioRegisters *s_pGpioRegisters;
-static unsigned int pinNum = 17; // alterar
+static unsigned int pinNum = 16; // alterar
 static unsigned int irqNumber;
 
 static int __init magnetic_driver_init(void);
@@ -76,7 +76,7 @@ static irqreturn_t irq_handler(int irq, void *dev_id)
     printk(KERN_INFO "[MAGNETIC] Interruption handler: PIN -> %d.\n", pinVal);
     info.si_signo = SIGH;
     info.si_code = SI_QUEUE;
-    info.si_int = pinVal;
+    info.si_int = 30;
 
     task = pid_task(find_pid_ns(pid, &init_pid_ns), PIDTYPE_PID);
 
@@ -183,7 +183,7 @@ static int __init magnetic_driver_init(void)
 
     irqNumber = gpio_to_irq(pinNum);
 
-    if (request_irq(irqNumber, irq_handler, IRQF_TRIGGER_RISING, DEVICE_NAME, (void *)(irq_handler)))
+    if (request_irq(irqNumber, irq_handler, IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING, DEVICE_NAME, (void *)(irq_handler)))
     {
         printk(KERN_INFO "[MAGNETIC] Cannot register IRQ\n");
         free_irq(irqNumber, (void *)(irq_handler));
@@ -193,6 +193,8 @@ static int __init magnetic_driver_init(void)
 
     s_pGpioRegisters = (struct GpioRegisters *)ioremap(GPIO_BASE, sizeof(struct GpioRegisters));
     SetGPIOFunction(s_pGpioRegisters, pinNum, GPIO_INPUT);
+
+    
 
     return 0;
 }

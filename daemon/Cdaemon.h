@@ -16,19 +16,23 @@
 #include <signal.h>
 
 //Components
-//#include "motion_sys.h"
-
+#include "motion_sys.h"
+#include "door_sys.h"
+#include "button_sys.h"
 
 class Cdaemon{
     private:
 
+    static Cdaemon *thisPtr;
+
     mqd_t msgqueue;
     struct mq_attr attr;
-    //door_sys door;
-    //motion_sys motion;
-    //button_sys button;
+    door_sys door;
+    motion_sys motion;
+    button_sys button;
 
     //Flags
+    bool button_flag = 0;
     bool door_flag = 0;
     bool motion_flag = 0;
 
@@ -37,7 +41,7 @@ class Cdaemon{
     void motion_isr();
     void button_isr();
 
-    void isr_control(int);
+    static void isr_control(int, siginfo_t *info, void *unused);        //function that will handle the signals sent from the device drivers
 
     public:
 

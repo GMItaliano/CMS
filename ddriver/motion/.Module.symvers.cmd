@@ -1,0 +1,1 @@
+cmd_/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/ddriver/motion/Module.symvers := sed 's/ko$$/o/' /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/ddriver/motion/modules.order | scripts/mod/modpost -m -a   -o /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/ddriver/motion/Module.symvers -e -i Module.symvers   -T -

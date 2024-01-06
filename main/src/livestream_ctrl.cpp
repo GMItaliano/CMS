@@ -1,12 +1,13 @@
 #include "livestream_ctrl.h"
+#include <unistd.h>
+#include <sys/wait.h>
 
-livestream_ctrl::livestream_ctrl(int cam) : camera(0)
+livestream_ctrl::livestream_ctrl() 
 {
 
-    Cdevice = cam;
+    //Cdevice = cam;
     //Mdevice = micro;
 
-    camera = camera_sys(Cdevice);
     //initialize microphone
 
 }
@@ -16,22 +17,49 @@ livestream_ctrl::~livestream_ctrl(){
 }
 
 void livestream_ctrl::start_livestream(){
-    
-    live_flag = 1;
 
-    camera.record_video(live_flag);
-    micro.record_audio(live_flag);
+    pid_t pid = fork();
+    if(pid == 0){
+        /*
+        ffmpeg -re -f v4l2 -video_size 320x240 -thread_queue_size 16384 -framerate 70 -i /dev/video0 -f alsa -ac 1 -thread_queue_size 1024 
+        -ar 44100 -i plughw:0,0 -f flv rtmp://localhost/live -c:a libfdk_aac -b:a 128k 
+        -c:v libx264 -b:v 1600k -qp 0  -preset ultrafast -filter:v fps=fps=30 -tune zerolatency -x264opts keyint=50 -g 25 -pix_fmt yuv420p 
+        */
+        char *args[] = {"ffmpeg", "-re", "-f", "v4l2", "-video_size", "320x240", "-thread_queue_size", "-16384", "-framerate", "70", "-i", "-/dev/video0", "-f", "-alsa", "-ac", "1", "-thread_queue_size", "-1024", "-ar", "44100", "-i"
+                        , "hw:1", "-f", "-flv", "rtmp://localhost/live", "-c:a", "libfdk_aac", "-b:a", "128k", "-c:v", "libx264", "-b:v", "1600k", "-qp", "0", "-preset", "ultrafast", "-filter:v", "fps=fps=30", "-tune", "zerolatency", "-x264opts"
+                        , "-keyint=50", "-g", "25", "-pix_fmt", "-yuv420p"};
+
+        execvp("ffmpeg",args);
+
+    } else {
+        // Parent process
+        int status;
+        waitpid(pid, &status, WNOHANG);
+    }	
     
 
     //send to NGINX
 }
 
 void livestream_ctrl::stop_livestream(){
-    
-    live_flag = 0;
 
-    camera.record_video(live_flag);
-    micro.record_audio(live_flag);
+    system("pidof ffmpeg | xargs kill -9");
 
     //stop sending to NGINX
+}
+
+void livestream_ctrl::play_audio(){
+
+    //database storage link: gs://cms-rasp.appspot.com/audio_livestream/mp3_file.mp3 / https://firebasestorage.googleapis.com/v0/b/cms-rasp.appspot.com/o/audio_livestream%252Fmp3_file.mp3?alt=media
+    //sound producer used: omxplayer
+
+    pid_t pid = fork();
+    if(pid == 0){   //child process
+        char *args[] = {"omxplayer", "--vol", "2200", "https://firebasestorage.googleapis.com/v0/b/cms-rasp.appspot.com/o/audio_livestream%2Fmp3_file.mp3?alt=media&token=a5c92c9a-8d6f-4fbf-a01b-1687a1c9134b", NULL};
+        execvp("omxplayer",args);
+    }else{          //parent process
+        int status;
+        waitpid(pid, &status, WNOHANG);
+    }
+
 }

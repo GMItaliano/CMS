@@ -1,6 +1,5 @@
 
 #include <linux/types.h>
-#include <iostream>
 
 #define BCM2708_PERI_BASE       0x3f000000
 #define GPIO_BASE (BCM2708_PERI_BASE + 0x200000) // GPIO controller

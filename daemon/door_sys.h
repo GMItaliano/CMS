@@ -6,6 +6,11 @@
 #include <signal.h>
 #include <iostream>
 
+#include "interrupt.h"
+#include "data_errors.h"
+
+//typedef void (*ISR)(int, siginfo_t*, void*);
+
 class door_sys
 {
 private:
@@ -13,8 +18,9 @@ private:
     std::string dev_str;
     int device;
     bool previous_val;
+    ISR handler;
 public:
-    door_sys(/* args */);
+    door_sys(ISR);
     ~door_sys();
 
     void enable();

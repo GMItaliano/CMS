@@ -97,19 +97,83 @@ CMakeFiles/daemon.o.dir/daemon/Cdaemon.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/daemon.o.dir/daemon/Cdaemon.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/daemon/Cdaemon.cpp -o CMakeFiles/daemon.o.dir/daemon/Cdaemon.cpp.s
 
+CMakeFiles/daemon.o.dir/daemon/data_errors.cpp.o: CMakeFiles/daemon.o.dir/flags.make
+CMakeFiles/daemon.o.dir/daemon/data_errors.cpp.o: ../daemon/data_errors.cpp
+CMakeFiles/daemon.o.dir/daemon/data_errors.cpp.o: CMakeFiles/daemon.o.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/daemon.o.dir/daemon/data_errors.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/daemon.o.dir/daemon/data_errors.cpp.o -MF CMakeFiles/daemon.o.dir/daemon/data_errors.cpp.o.d -o CMakeFiles/daemon.o.dir/daemon/data_errors.cpp.o -c /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/daemon/data_errors.cpp
+
+CMakeFiles/daemon.o.dir/daemon/data_errors.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/daemon.o.dir/daemon/data_errors.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/daemon/data_errors.cpp > CMakeFiles/daemon.o.dir/daemon/data_errors.cpp.i
+
+CMakeFiles/daemon.o.dir/daemon/data_errors.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/daemon.o.dir/daemon/data_errors.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/daemon/data_errors.cpp -o CMakeFiles/daemon.o.dir/daemon/data_errors.cpp.s
+
+CMakeFiles/daemon.o.dir/daemon/button_sys.cpp.o: CMakeFiles/daemon.o.dir/flags.make
+CMakeFiles/daemon.o.dir/daemon/button_sys.cpp.o: ../daemon/button_sys.cpp
+CMakeFiles/daemon.o.dir/daemon/button_sys.cpp.o: CMakeFiles/daemon.o.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/daemon.o.dir/daemon/button_sys.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/daemon.o.dir/daemon/button_sys.cpp.o -MF CMakeFiles/daemon.o.dir/daemon/button_sys.cpp.o.d -o CMakeFiles/daemon.o.dir/daemon/button_sys.cpp.o -c /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/daemon/button_sys.cpp
+
+CMakeFiles/daemon.o.dir/daemon/button_sys.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/daemon.o.dir/daemon/button_sys.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/daemon/button_sys.cpp > CMakeFiles/daemon.o.dir/daemon/button_sys.cpp.i
+
+CMakeFiles/daemon.o.dir/daemon/button_sys.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/daemon.o.dir/daemon/button_sys.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/daemon/button_sys.cpp -o CMakeFiles/daemon.o.dir/daemon/button_sys.cpp.s
+
+CMakeFiles/daemon.o.dir/daemon/door_sys.cpp.o: CMakeFiles/daemon.o.dir/flags.make
+CMakeFiles/daemon.o.dir/daemon/door_sys.cpp.o: ../daemon/door_sys.cpp
+CMakeFiles/daemon.o.dir/daemon/door_sys.cpp.o: CMakeFiles/daemon.o.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/daemon.o.dir/daemon/door_sys.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/daemon.o.dir/daemon/door_sys.cpp.o -MF CMakeFiles/daemon.o.dir/daemon/door_sys.cpp.o.d -o CMakeFiles/daemon.o.dir/daemon/door_sys.cpp.o -c /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/daemon/door_sys.cpp
+
+CMakeFiles/daemon.o.dir/daemon/door_sys.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/daemon.o.dir/daemon/door_sys.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/daemon/door_sys.cpp > CMakeFiles/daemon.o.dir/daemon/door_sys.cpp.i
+
+CMakeFiles/daemon.o.dir/daemon/door_sys.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/daemon.o.dir/daemon/door_sys.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/daemon/door_sys.cpp -o CMakeFiles/daemon.o.dir/daemon/door_sys.cpp.s
+
+CMakeFiles/daemon.o.dir/daemon/motion_sys.cpp.o: CMakeFiles/daemon.o.dir/flags.make
+CMakeFiles/daemon.o.dir/daemon/motion_sys.cpp.o: ../daemon/motion_sys.cpp
+CMakeFiles/daemon.o.dir/daemon/motion_sys.cpp.o: CMakeFiles/daemon.o.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/daemon.o.dir/daemon/motion_sys.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/daemon.o.dir/daemon/motion_sys.cpp.o -MF CMakeFiles/daemon.o.dir/daemon/motion_sys.cpp.o.d -o CMakeFiles/daemon.o.dir/daemon/motion_sys.cpp.o -c /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/daemon/motion_sys.cpp
+
+CMakeFiles/daemon.o.dir/daemon/motion_sys.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/daemon.o.dir/daemon/motion_sys.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/daemon/motion_sys.cpp > CMakeFiles/daemon.o.dir/daemon/motion_sys.cpp.i
+
+CMakeFiles/daemon.o.dir/daemon/motion_sys.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/daemon.o.dir/daemon/motion_sys.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/daemon/motion_sys.cpp -o CMakeFiles/daemon.o.dir/daemon/motion_sys.cpp.s
+
 # Object files for target daemon.o
 daemon_o_OBJECTS = \
 "CMakeFiles/daemon.o.dir/daemon/maind.cpp.o" \
-"CMakeFiles/daemon.o.dir/daemon/Cdaemon.cpp.o"
+"CMakeFiles/daemon.o.dir/daemon/Cdaemon.cpp.o" \
+"CMakeFiles/daemon.o.dir/daemon/data_errors.cpp.o" \
+"CMakeFiles/daemon.o.dir/daemon/button_sys.cpp.o" \
+"CMakeFiles/daemon.o.dir/daemon/door_sys.cpp.o" \
+"CMakeFiles/daemon.o.dir/daemon/motion_sys.cpp.o"
 
 # External object files for target daemon.o
 daemon_o_EXTERNAL_OBJECTS =
 
 ../daemon.o: CMakeFiles/daemon.o.dir/daemon/maind.cpp.o
 ../daemon.o: CMakeFiles/daemon.o.dir/daemon/Cdaemon.cpp.o
+../daemon.o: CMakeFiles/daemon.o.dir/daemon/data_errors.cpp.o
+../daemon.o: CMakeFiles/daemon.o.dir/daemon/button_sys.cpp.o
+../daemon.o: CMakeFiles/daemon.o.dir/daemon/door_sys.cpp.o
+../daemon.o: CMakeFiles/daemon.o.dir/daemon/motion_sys.cpp.o
 ../daemon.o: CMakeFiles/daemon.o.dir/build.make
 ../daemon.o: CMakeFiles/daemon.o.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable ../daemon.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable ../daemon.o"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/daemon.o.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

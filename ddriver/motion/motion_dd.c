@@ -46,7 +46,7 @@ static struct class *dev_class = NULL;
 static struct cdev c_dev;  // Character device structure
 
 struct GpioRegisters *s_pGpioRegisters;
-static unsigned int pinNum = 16;
+static unsigned int pinNum = 20;
 static unsigned int irqNumber;
 
 static int __init motion_driver_init(void);
@@ -74,9 +74,10 @@ static irqreturn_t irq_handler(int irq, void *dev_id)
 #endif
 
 	printk(KERN_INFO "[MOTION] Interruption handler: PIN -> %d.\n", pinVal);
+
 	info.si_signo = SIGH;
 	info.si_code = SI_QUEUE;
-	info.si_int = pinVal;
+	info.si_int = 40;
  	
  	task = pid_task(find_pid_ns(pid, &init_pid_ns), PIDTYPE_PID);
 	
@@ -190,8 +191,7 @@ static int __init motion_driver_init(void)
 		unregister_chrdev_region(dev,1);
 	}
     
-    	s_pGpioRegisters = (struct GpioRegisters *)ioremap(GPIO_BASE, sizeof(struct GpioRegisters));
-
+	s_pGpioRegisters = (struct GpioRegisters *)ioremap(GPIO_BASE, sizeof(struct GpioRegisters));
 	SetGPIOFunction(s_pGpioRegisters, pinNum, GPIO_INPUT);
 
 	return 0;

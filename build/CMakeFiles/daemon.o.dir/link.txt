@@ -1,1 +1,1 @@
-/usr/bin/c++ -g -g CMakeFiles/daemon.o.dir/daemon/maind.cpp.o CMakeFiles/daemon.o.dir/daemon/Cdaemon.cpp.o -o ../daemon.o 
+/usr/bin/c++ -g -g CMakeFiles/daemon.o.dir/daemon/maind.cpp.o CMakeFiles/daemon.o.dir/daemon/Cdaemon.cpp.o CMakeFiles/daemon.o.dir/daemon/data_errors.cpp.o CMakeFiles/daemon.o.dir/daemon/button_sys.cpp.o CMakeFiles/daemon.o.dir/daemon/door_sys.cpp.o CMakeFiles/daemon.o.dir/daemon/motion_sys.cpp.o -o ../daemon.o 

@@ -1,120 +1,63 @@
-        if(FALSE)
+        #if(FALSE)
+        # CROSS COMPILE VERSION
         cmake_minimum_required(VERSION 3.22.1)
-        project(CMS_test)
-        set(CMAKE_CXX_STANDARD 11)
-        set(CMAKE_CXX_STANDARD_REQUIRED ON)
+        project(CMS_test LANGUAGES CXX)
 
+        # Compilers
+        set(CMAKE_CXX_COMPILER "/home/goncalo/buildroots/buildroot-2021.08-Fato/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-g++")
+        set(CMAKE_CC_COMPILER "/home/goncalo/buildroots/buildroot-2021.08-Fato/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc")
 
-        # Packages
-        #find_package(Python3 COMPONENTS Development)
-        find_package (Python3 REQUIRED COMPONENTS Interpreter Development)
-        include_directories(${Python3_INCLUDE_DIRS})
+        # Bin files to bin dir
+        set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 
-        # Executable directory
-        set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
-
-        # Including all include directories
         include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/main/inc
-        ${CMAKE_CURRENT_SOURCE_DIR}/../inc
-        ${CMAKE_CURRENT_SOURCE_DIR}/daemon/
+        /home/goncalo/buildroots/buildroot-2021.08-Fato/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/python3.9
         )
-
-        # All source files
-        # file(GLOB main_SRCS
-        #     "${CMAKE_CURRENT_SOURCE_DIR}/main/src/*.cpp"
-        # )
 
         set(SOURCES
         main/main.cpp
         main/src/house_system.cpp
         main/src/database_sys.cpp
+        main/src/relay_sys.cpp
+        main/src/livestream_ctrl.cpp
         )
 
-        add_executable(main.o ${SOURCES})
+        # Main
+        add_executable(mainlocal.elf ${SOURCES})
+        target_compile_features(mainlocal.elf PRIVATE cxx_std_11)
 
-        # Main process
-        #add_executable(main.o 
-        #   main/main.cpp 
-        #    main/src/house_system.cpp 
-        #    main/src/databse_sys.cpp) #${main_SRCS}
+        # Linking Libraries
+        target_link_libraries(mainlocal.elf PRIVATE
+        /home/goncalo/buildroots/buildroot-2021.08-Fato/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libpython3.9.so
+        -lpthread
+        -lrt
+        )
 
-        # Link against Python library
-        #target_link_libraries(main.o PRIVATE Python3::Python)
+        #Daemon Configuration
 
-        # All source files for daemon
-        #file(GLOB daemon_SRCS
-        #    "${CMAKE_CURRENT_SOURCE_DIR}/daemon/daemon.cpp"
-        #)
+        set(DSOURCES
+        daemon/button_sys.cpp
+        daemon/door_sys.cpp
+        daemon/motion_sys.cpp
+        )
 
         # Daemon process
-        add_executable(daemon.o daemon/maind.cpp daemon/Cdaemon.cpp) #${daemon_SRCS}
+        add_executable(daemon.elf daemon/maind.cpp daemon/Cdaemon.cpp daemon/data_errors.cpp ${DSOURCES}) #${daemon_SRCS}
 
-        # Link against Python library
-        #target_link_libraries(daemon.o ${Python3_LIBRARIES})
+        target_include_directories(daemon.elf PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/daemon
+        )
 
+        #endif()
 
-        target_include_directories(main.o PRIVATE
-                ${Python3_INCLUDE_DIRS})
-
-        target_link_directories(main.o PRIVATE
-                ${Python3_LIBRARY_DIRS})
-
-        target_link_libraries(main.o PRIVATE
-                ${Python3_LIBRARIES})
-        endif()
         #
         #
         #
 
         if(FALSE)
-        cmake_minimum_required(VERSION 3.22.1)
-        project(CMS_test)
-        set(CMAKE_CXX_STANDARD 11)
-        set(CMAKE_CXX_STANDARD_REQUIRED ON)
-        
-        # Enable debugging symbols
-        set(CMAKE_BUILD_TYPE Debug)
-        
-        # Add compiler flags for debugging
-        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
-        
-        # Packages
-        find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
-        include_directories(${Python3_INCLUDE_DIRS})
 
-        # Find Firebase Admin
-        find_package(FIREBASE_ADMIN_LIBRARY firebase-admin PATHS /home/goncalo/.local/lib/python3.10/site-packages)
-
-        
-        # Executable directory
-        set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
-        
-        # Including all include directories
-        include_directories(
-            ${CMAKE_CURRENT_SOURCE_DIR}/main/inc
-            ${CMAKE_CURRENT_SOURCE_DIR}/../inc
-            ${CMAKE_CURRENT_SOURCE_DIR}/daemon/
-        )
-        
-        set(SOURCES
-            main/main.cpp
-            main/src/house_system.cpp
-            main/src/database_sys.cpp
-        )
-        
-        add_executable(main.o ${SOURCES})
-        
-        # Link against Python libraries
-        target_link_libraries(main.o PRIVATE ${Python3_LIBRARIES} ${FIREBASE_ADMIN_LIBRARY}) 
-        
-        # Include Python directories
-        target_include_directories(main.o PRIVATE ${Python3_INCLUDE_DIRS})
-        endif()
-
-        #
-        #
-        #
+        ##NORMAL COMPILE VERSION
 
         cmake_minimum_required(VERSION 3.22.1)
         project(CMS_test)
@@ -147,6 +90,7 @@
         main/main.cpp
         main/src/house_system.cpp
         main/src/database_sys.cpp
+        main/src/relay_sys.cpp
         )
 
         add_executable(test ${SOURCES})
@@ -161,10 +105,25 @@
         # Add other include directories if needed
         )
 
+        #Daemon Configuration
+
+        set(DSOURCES
+        daemon/button_sys.cpp
+        daemon/door_sys.cpp
+        daemon/motion_sys.cpp
+        )
+
         # Daemon process
-        add_executable(daemon.o daemon/maind.cpp daemon/Cdaemon.cpp) #${daemon_SRCS}
+        add_executable(daemon.o daemon/maind.cpp daemon/Cdaemon.cpp daemon/data_errors.cpp ${DSOURCES}) #${daemon_SRCS}
 
-        #To execute this program: sudo -E ./main.o 
-
+        target_include_directories(daemon.o PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/daemon
+        )
 
         
+
+
+        endif()
+
+        #To execute debug sudo: -E gdb --args ./test
+        #To execute this program: sudo -E ./main.o 

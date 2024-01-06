@@ -63,8 +63,8 @@ CMAKE_BINARY_DIR = /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/test.dir/all
-all: CMakeFiles/daemon.o.dir/all
+all: CMakeFiles/mainlocal.elf.dir/all
+all: CMakeFiles/daemon.elf.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -72,61 +72,61 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/test.dir/clean
-clean: CMakeFiles/daemon.o.dir/clean
+clean: CMakeFiles/mainlocal.elf.dir/clean
+clean: CMakeFiles/daemon.elf.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/test.dir
+# Target rules for target CMakeFiles/mainlocal.elf.dir
 
 # All Build rule for target.
-CMakeFiles/test.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles --progress-num=4,5,6,7 "Built target test"
-.PHONY : CMakeFiles/test.dir/all
+CMakeFiles/mainlocal.elf.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles --progress-num=8,9,10,11,12,13 "Built target mainlocal.elf"
+.PHONY : CMakeFiles/mainlocal.elf.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles 4
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test.dir/all
+CMakeFiles/mainlocal.elf.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles 6
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/mainlocal.elf.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles 0
-.PHONY : CMakeFiles/test.dir/rule
+.PHONY : CMakeFiles/mainlocal.elf.dir/rule
 
 # Convenience name for target.
-test: CMakeFiles/test.dir/rule
-.PHONY : test
+mainlocal.elf: CMakeFiles/mainlocal.elf.dir/rule
+.PHONY : mainlocal.elf
 
 # clean rule for target.
-CMakeFiles/test.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/clean
-.PHONY : CMakeFiles/test.dir/clean
+CMakeFiles/mainlocal.elf.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mainlocal.elf.dir/build.make CMakeFiles/mainlocal.elf.dir/clean
+.PHONY : CMakeFiles/mainlocal.elf.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/daemon.o.dir
+# Target rules for target CMakeFiles/daemon.elf.dir
 
 # All Build rule for target.
-CMakeFiles/daemon.o.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.o.dir/build.make CMakeFiles/daemon.o.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.o.dir/build.make CMakeFiles/daemon.o.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles --progress-num=1,2,3 "Built target daemon.o"
-.PHONY : CMakeFiles/daemon.o.dir/all
+CMakeFiles/daemon.elf.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target daemon.elf"
+.PHONY : CMakeFiles/daemon.elf.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/daemon.o.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles 3
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/daemon.o.dir/all
+CMakeFiles/daemon.elf.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles 7
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/daemon.elf.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/build/CMakeFiles 0
-.PHONY : CMakeFiles/daemon.o.dir/rule
+.PHONY : CMakeFiles/daemon.elf.dir/rule
 
 # Convenience name for target.
-daemon.o: CMakeFiles/daemon.o.dir/rule
-.PHONY : daemon.o
+daemon.elf: CMakeFiles/daemon.elf.dir/rule
+.PHONY : daemon.elf
 
 # clean rule for target.
-CMakeFiles/daemon.o.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.o.dir/build.make CMakeFiles/daemon.o.dir/clean
-.PHONY : CMakeFiles/daemon.o.dir/clean
+CMakeFiles/daemon.elf.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/daemon.elf.dir/build.make CMakeFiles/daemon.elf.dir/clean
+.PHONY : CMakeFiles/daemon.elf.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

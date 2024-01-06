@@ -21,11 +21,11 @@ int main(){
 
 	if (pid < 0) { // on error exit
 		std::perror("fork");
-	exit(EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 
 	if (pid > 0){  
-		std::printf("Deamon PID: %d\n", pid);	
+		std::printf("[DAEMON] Deamon PID: %d\n", pid);	
 		exit(EXIT_SUCCESS); // parent process (exit)
 	}
 	sid = setsid(); // create a new session

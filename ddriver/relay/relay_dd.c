@@ -36,7 +36,7 @@ static struct class *s_pDeviceClass;
 static struct device *s_pDeviceObject;
 struct GpioRegisters *s_pGpioRegisters;
 
-static const int relayGpioPin = 20;
+static const int relayGpioPin = 26;
 
 ssize_t relay_device_write(struct file *pfile, const char __user *pbuff, size_t len, loff_t *off) { //tirar o static
 	struct GpioRegisters *pdev; 

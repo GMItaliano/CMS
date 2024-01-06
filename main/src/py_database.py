@@ -1,6 +1,7 @@
 
 import firebase_admin
-from firebase_admin import db, credentials
+from firebase_admin import db, credentials #, storage
+
 
 #Global
 
@@ -30,6 +31,20 @@ def dict_sensors(name,type,room):
         "Type": type
     }
 
+def separate_data(data_string):
+    try:
+        # Split the data string into key and value
+        key, value = data_string.split(',')
+
+        # Return the separated key and value
+        return key.strip(), value.strip()
+
+    except ValueError:
+        # Handle the case where the data string cannot be split into key and value
+        print('--PYTHON-- Error: Data string is not in the expected format.')
+        return None, None
+
+
 #----------------------------------
 
 #FUNCTION TO INITIALIZE DATABASE
@@ -41,15 +56,17 @@ def innit_database():
     try:
         cred = credentials.Certificate(credentials_database)
         info = firebase_admin.initialize_app(cred, {'databaseURL': 'https://cms-rasp-default-rtdb.europe-west1.firebasedatabase.app'})
-        print(f"Firebase Admin SDK initialized: {info.name}")
+        print(f"--PYTHON-- Firebase Admin SDK initialized: {info.name}")
     except Exception as e:
-        print(f"Error initializing Firebase Admin SDK: {e}")
+        print(f"--PYTHON-- Error initializing Firebase Admin SDK: {e}")
 
     #firebase_admin.initialize_app(cred)
     
     #create the data for the sensors
-    sensors_notification = {"Motion": 0, "Magnetic" : 0, "Button" : 0, "Relay": 0}
+    sensors_notification = {"Motion": 0, "Magnetic" : 0, "Button" : 0}
     sensors_data = [dict_sensors("Test Motion","Motion", "Hallway"), dict_sensors("Test Magnetic", "Magnetic", "Front Door"), dict_sensors("Test Button", "Button", "Hallway"), dict_sensors("Stove Relay", "Relay", "Kitchen")]
+    periph_activation = {"Relay":0, "Sound":0, "Livestream":0}
+    logs_innit = {"INNIT":"INNIT"}
 
     #create the separated files for each data
     # Create the separated files for each data
@@ -59,7 +76,8 @@ def innit_database():
 
     ref.child("Notifications").set(sensors_notification)
     ref.child("Data").set(sensors_data)
-    #ref.child("Logs")
+    ref.child("Logs").set(logs_innit)
+    ref.child("Control").set(periph_activation)
 
     return ref
 
@@ -90,9 +108,23 @@ def set_operation(ref, key, value):         #go to desired location 'ref' , a sp
     #app = firebase_admin.get_app()
     #cred = credentials.Certificate('database.json')
     #firebase_admin.initialize_app(cred, {'databaseURL': 'https://cms-rasp-default-rtdb.europe-west1.firebasedatabase.app'})
+    refi = db.reference(ref)
+    refi.child(key).set(value)
+#   return refi.get()
 
-    ref.child(key).set(value)
-    return ref.get()
+def push_data(path,data):
+
+    key, value = separate_data(data)
+    key = key.replace('[', '-').replace(']', '-')
+    print(f"--PYTHON-- Extracted key: {key}, value: {value}")
+
+    # Get a reference to the specified path
+    ref = db.reference(f"{path}/{key}")
+    
+    # Push the new data to the specified path
+    ref.set(value)
+
+
 
 
 def update_flags(sensor_type, new_state):
@@ -103,7 +135,7 @@ def update_flags(sensor_type, new_state):
 
     ref = db.reference("/Notifications")
     ref.child(sensor_type).set(new_state)
-    print(f"Updated {sensor_type} flag to {new_state}")
+    print(f"--PYTHON-- Updated {sensor_type} flag to {new_state}")
 
 
 #def update_logs(sensor_type, date):
@@ -157,5 +189,36 @@ def update_user(mail, password):
     ref.child("existing_user_key").update(user_data)
     
     return f"User updated: {user_data}"
+
+
+# Set the path where you want to save the audio file locally
+# local_file_path = 'CMS/audio/audio.mp3'                                           #RASP
+local_path = '/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/audio'              #UBUNTU
+
+def download_latest_audio():
+    # try:
+    #     # Reference to the database
+    #     db_ref = db.reference("Files/audio_livestream")
+    #     print('--PYTHON-- Inside download Audio')
+    #     # Query the database to get the latest file
+    #     latest_file_ref = db_ref.order_by_child("timestamp").limit_to_last(1).get()
+
+    #     if latest_file_ref:
+    #         # Extract the latest file key and timestamp
+    #         latest_file_key, latest_timestamp = list(latest_file_ref.items())[0]
+
+    #         # Construct the path to the latest audio file in Firebase Storage
+    #         audio_file_path = f"Files/audio_livesream/{latest_file_key}.mp3"
+
+    #         # Download the audio file to a local file
+    #         local_file_path = local_path + [latest_file_key] + ".mp3"
+    #         storage.bucket().blob(audio_file_path).download_to_filename(local_file_path)
+
+    #         print(f'--PYTHON-- Latest audio file downloaded and saved to {local_file_path} successfully.')
+    #     else:
+    #         print('--PYTHON-- No audio files found.')
+
+    # except Exception as e:
+        print(f'--PYTHON-- Error downloading latest audio file: {e}')
 
 

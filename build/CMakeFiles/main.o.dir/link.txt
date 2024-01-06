@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/main.o.dir/main/main.cpp.o CMakeFiles/main.o.dir/main/src/house_system.cpp.o CMakeFiles/main.o.dir/main/src/database_sys.cpp.o -o ../main.o  /usr/lib/x86_64-linux-gnu/libpython3.10.so 

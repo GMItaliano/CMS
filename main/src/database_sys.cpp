@@ -15,11 +15,18 @@ database_sys::database_sys() {
         exit(EXIT_FAILURE);
     }
 
-    // Append the Python script directory to the path
-    std::string PythonPath = std::string(buffer) + "/main/src";
+    //------------------------------------ UBUNTU ------------------------------------
+    // Append the Python script directory to the path -> Computer linux
+    //std::string PythonPath = std::string(buffer) + "/main/src"; 
 
     //Set path
-    setenv("PYTHONPATH", PythonPath.c_str(), 1);
+    //setenv("PYTHONPATH", PythonPath.c_str(), 1);
+    //--------------------------------------------------------------------------------
+
+
+    //------------------------------------- RASP -------------------------------------
+    setenv("PYTHONPATH", ".", 1);
+    //--------------------------------------------------------------------------------
 
     pythonPath = std::getenv("PYTHONPATH");
     std::cout << "PYTHONPATH: " << (pythonPath ? pythonPath : "not set") << std::endl;
@@ -73,6 +80,23 @@ void database_sys::send_data(const std::string& path, const std::string& key, co
             Py_DECREF(pSendData);
         } else {
             fprintf(stderr, "Error: The 'set_operation' function is not callable.\n");
+        }
+    }
+}
+
+void database_sys::push_data(const std::string& path, const std::string& data){
+    
+    if (this->pModule != nullptr) {
+        PyObject* pPushData = PyObject_GetAttrString(this->pModule, "push_data");
+
+        if (PyCallable_Check(pPushData)) {
+            PyObject* pArgs = PyTuple_Pack(2, Py_BuildValue("s", path.c_str()), Py_BuildValue("s", data.c_str()));
+            PyObject_CallObject(pPushData, pArgs);
+
+            Py_DECREF(pArgs);
+            Py_DECREF(pPushData);
+        } else {
+            fprintf(stderr, "Error: The 'push_data' function is not callable.\n");
         }
     }
 }
@@ -145,6 +169,30 @@ void database_sys::flags_update(int type, bool state) {
             Py_XDECREF(pFlagsUpdate);
         } else {
             fprintf(stderr, "Error: The 'flags_update' function is not callable.\n");
+        }
+    }
+}
+
+void database_sys::download_audio() {
+    if (this->pModule != nullptr) {
+        PyObject* pDownload_latest_audio = PyObject_GetAttrString(this->pModule, "download_latest_audio");
+
+        if (pDownload_latest_audio != nullptr && PyCallable_Check(pDownload_latest_audio)) {
+            // Call the download_audio_wrapper function with appropriate arguments
+            PyObject* pArgs = PyTuple_Pack(0);
+            PyObject* pResult = PyObject_CallObject(pDownload_latest_audio, pArgs);
+
+            // Check for Python exceptions
+            if (pResult == nullptr) {
+                PyErr_Print();
+                fprintf(stderr, "Error during download_latest_audio function call.\n");
+            }
+
+            Py_XDECREF(pArgs);
+            Py_XDECREF(pResult);
+            Py_XDECREF(pDownload_latest_audio);
+        } else {
+            fprintf(stderr, "Error: The 'download_latest_audio' function is not callable.\n");
         }
     }
 }

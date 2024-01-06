@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/main/main.cpp" "CMakeFiles/test.dir/main/main.cpp.o" "gcc" "CMakeFiles/test.dir/main/main.cpp.o.d"
   "/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/main/src/database_sys.cpp" "CMakeFiles/test.dir/main/src/database_sys.cpp.o" "gcc" "CMakeFiles/test.dir/main/src/database_sys.cpp.o.d"
   "/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/main/src/house_system.cpp" "CMakeFiles/test.dir/main/src/house_system.cpp.o" "gcc" "CMakeFiles/test.dir/main/src/house_system.cpp.o.d"
+  "/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/main/src/relay_sys.cpp" "CMakeFiles/test.dir/main/src/relay_sys.cpp.o" "gcc" "CMakeFiles/test.dir/main/src/relay_sys.cpp.o.d"
   )
 
 # Targets to which this target links.

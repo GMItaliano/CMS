@@ -1,4 +1,5 @@
 #include "utils.h"
+#include <stdbool.h>
 #include <linux/module.h>
 
 void SetGPIOFunction(struct GpioRegisters *s_pGpioRegisters, int GPIO, int functionCode) {
