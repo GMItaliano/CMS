@@ -13,16 +13,16 @@
 
 //------- GLOBAL VARIABLES --------
 
-int count = 0;
-int shared_value = 0;
+//int count = 0;
+//int shared_value = 0;
 bool control_relay = 0;
 bool control_sound = 0;
 bool control_live = 0;
 
 
-bool last_motion = 0;
-bool last_magn = 0;
-bool last_button = 0;
+// bool last_motion = 0;
+// bool last_magn = 0;
+// bool last_button = 0;
 
 std::string database_data;
 //---------------------------------
@@ -395,7 +395,8 @@ void* houseSystem::tupdateFlags(void* arg){
 
                     if(instance->database_sen.button == 0 && instance->house_sen.button == 1){
                         //Update value to logs when rising trigger 0->1
-                        strcat(log_msg, ",Button Pressed");
+                        strcat(log_msg, "\t,Button Pressed");
+                        strcat(log_msg,time_string.c_str());
                         log_msg[strlen(log_msg)+1] = '\0';
                         std::cout << "[INFO] " << log_msg << std::endl;
                         instance->database.push_data("/Logs", log_msg);
@@ -409,7 +410,8 @@ void* houseSystem::tupdateFlags(void* arg){
 
                     if(instance->database_sen.motion == 0 && instance->house_sen.motion == 1){
                         //Update value to logs when rising trigger 0->1
-                        strcat(log_msg, ",Motion Triggered");
+                        strcat(log_msg, "\t,Motion Detected");
+                         strcat(log_msg,time_string.c_str());
                         log_msg[strlen(log_msg)+1] = '\0';
                         std::cout << "[INFO] " << log_msg << std::endl;
                         instance->database.push_data("/Logs", log_msg);
@@ -423,7 +425,8 @@ void* houseSystem::tupdateFlags(void* arg){
 
                     if(!instance->database_sen.door && instance->house_sen.door){
                         //Update value to logs when rising trigger 0->1
-                        strcat(log_msg, ",Door Opened");
+                        strcat(log_msg, "\t,Door is Open");
+                        strcat(log_msg,time_string.c_str());
                         log_msg[strlen(log_msg)+1] = '\0';
                         std::cout << "[INFO] " << log_msg << std::endl;
                         instance->database.push_data("/Logs", log_msg);
@@ -530,6 +533,9 @@ void* houseSystem::trelay(void* arg){
     -> This function is responsible for the enabling and disabling of the relay this function will be interacted
     by the value of its flag in the database
     */
+
+    //assert(args!=NULL);       --> proteção do sistema
+
     houseSystem* instance = static_cast<houseSystem*>(arg);
     std::cout << "[TRELAY] 4 Relay in" << std::endl;
     

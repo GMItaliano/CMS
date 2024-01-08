@@ -147,78 +147,34 @@ def update_flags(sensor_type, new_state):
 
 #----------------------------------
 
-#FUNCTIONS FOR USER CONFIGURATION
-
-def new_user(mail, password, house_code):
-    user_data = {
-        "email": mail,
-        "password": password,
-        "house_code": house_code,
-        # Add other user-related data as needed
-    }
-    
-    # create a new user under "Users" in the database
-    ref = db.reference("/Users")
-    ref.push().set(user_data)
-    
-    return f"New user created: {user_data}"
-
-def add_user(mail, password):
-    user_data = {
-        "email": mail,
-        "password": password,
-        # Add other user-related data as needed
-    }
-    
-    # add a user under "Users" in the database
-    ref = db.reference("/Users")
-    ref.push().set(user_data)
-    
-    return f"User added: {user_data}"
-
-def update_user(mail, password):
-    user_data = {
-        "email": mail,
-        "password": password,
-        # Add other user-related data as needed
-    }
-    
-    # update a user under "Users" in the database
-    ref = db.reference("/Users")
-    # Replace "existing_user_key" with the key of the user you want to update
-    ref.child("existing_user_key").update(user_data)
-    
-    return f"User updated: {user_data}"
-
-
 # Set the path where you want to save the audio file locally
 # local_file_path = 'CMS/audio/audio.mp3'                                           #RASP
-local_path = '/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/audio'              #UBUNTU
+# local_path = '/home/goncalo/Desktop/Trabalhos/Rasp/CMS/CMS-Rasp/audio'              #UBUNTU
 
-def download_latest_audio():
-    # try:
-    #     # Reference to the database
-    #     db_ref = db.reference("Files/audio_livestream")
-    #     print('--PYTHON-- Inside download Audio')
-    #     # Query the database to get the latest file
-    #     latest_file_ref = db_ref.order_by_child("timestamp").limit_to_last(1).get()
+# def download_latest_audio():
+#     # try:
+#     #     # Reference to the database
+#     #     db_ref = db.reference("Files/audio_livestream")
+#     #     print('--PYTHON-- Inside download Audio')
+#     #     # Query the database to get the latest file
+#     #     latest_file_ref = db_ref.order_by_child("timestamp").limit_to_last(1).get()
 
-    #     if latest_file_ref:
-    #         # Extract the latest file key and timestamp
-    #         latest_file_key, latest_timestamp = list(latest_file_ref.items())[0]
+#     #     if latest_file_ref:
+#     #         # Extract the latest file key and timestamp
+#     #         latest_file_key, latest_timestamp = list(latest_file_ref.items())[0]
 
-    #         # Construct the path to the latest audio file in Firebase Storage
-    #         audio_file_path = f"Files/audio_livesream/{latest_file_key}.mp3"
+#     #         # Construct the path to the latest audio file in Firebase Storage
+#     #         audio_file_path = f"Files/audio_livesream/{latest_file_key}.mp3"
 
-    #         # Download the audio file to a local file
-    #         local_file_path = local_path + [latest_file_key] + ".mp3"
-    #         storage.bucket().blob(audio_file_path).download_to_filename(local_file_path)
+#     #         # Download the audio file to a local file
+#     #         local_file_path = local_path + [latest_file_key] + ".mp3"
+#     #         storage.bucket().blob(audio_file_path).download_to_filename(local_file_path)
 
-    #         print(f'--PYTHON-- Latest audio file downloaded and saved to {local_file_path} successfully.')
-    #     else:
-    #         print('--PYTHON-- No audio files found.')
+#     #         print(f'--PYTHON-- Latest audio file downloaded and saved to {local_file_path} successfully.')
+#     #     else:
+#     #         print('--PYTHON-- No audio files found.')
 
-    # except Exception as e:
-        print(f'--PYTHON-- Error downloading latest audio file: {e}')
+#     # except Exception as e:
+#         print(f'--PYTHON-- Error downloading latest audio file: {e}')
 
 

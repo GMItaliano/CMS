@@ -6,12 +6,11 @@
 
 class livestream_ctrl{ 
     private:
-        std::string path;
-        std::string database_link;
-        bool live_flag;
-
-        //int Cdevice;
-       // int Mdevice;
+        // std::string path;
+        // std::string database_link;
+        // bool live_flag;
+        // int Cdevice;
+        // int Mdevice;
 
     public:
 

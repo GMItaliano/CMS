@@ -10,6 +10,12 @@
 
 #include "data_errors.h"
 
+/*
+instead of #define XXX "msg" -> constexpr const char* 'name' = "XXXXX"
+
+funciona da mesma maneira de um define
+*/
+
 #define MQ_NAME "/MSGQUEUE_SENSORS"
 #define MQ_MAXSIZE 50
 #define MQ_MAXMSGS 5
@@ -18,9 +24,9 @@
 #define MOTION_N 40
 #define MAGNET_N 30
 
-static int count = 0;
+//static int count = 0;
+//int value_sig = 0;
 bool send_message = 0;
-int value_sig = 0;
 bool update = 0;
 
 
@@ -234,6 +240,7 @@ void Cdaemon::isr_control(int control, siginfo_t *info, void *unused) {
             break;
 
         default:
+			//adicionar asserts para resolver possiveis erros 
             send_message = 0;
             logError("[ERROR] Signal was undefined");
             break;
