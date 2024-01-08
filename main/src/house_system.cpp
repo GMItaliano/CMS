@@ -3,28 +3,18 @@
 #include <string.h>
 #include <cerrno>
 #include <cstdio>
-
-//test linux interrupt
 #include <time.h>
-//--------------------
 
 #define NUMTHREADS  5
 #define CONDSIZE    10
 
 //------- GLOBAL VARIABLES --------
 
-//int count = 0;
-//int shared_value = 0;
 bool control_relay = 0;
 bool control_sound = 0;
 bool control_live = 0;
 
-
-// bool last_motion = 0;
-// bool last_magn = 0;
-// bool last_button = 0;
-
-std::string database_data;
+//std::string database_data;
 //---------------------------------
 
 //---------- OTHER FUNCTIONS NEEDED -------------
@@ -325,6 +315,7 @@ void* houseSystem::tupdateFlags(void* arg){
 
     std::cout << "[TUPDFLG] 1 update Flags in" << std::endl;
     houseSystem* instance = static_cast<houseSystem*>(arg);
+    std::string database_data;
 
     while(!instance->control_flag){
         pthread_mutex_lock(&instance -> mutdata);
