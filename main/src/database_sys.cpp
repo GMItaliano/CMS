@@ -67,13 +67,13 @@ database_sys::~database_sys() {
     Py_Finalize();
 }
 
-void database_sys::send_data(const std::string& path, const std::string& key, const std::string& value) {
+void database_sys::send_data(const std::string& path, const std::string& key, bool value) {
     
     if (this->pModule != nullptr) {
         PyObject* pSendData = PyObject_GetAttrString(this->pModule, "set_operation");
 
-        if (PyCallable_Check(pSendData)) {
-            PyObject* pArgs = PyTuple_Pack(3, Py_BuildValue("s", path.c_str()), Py_BuildValue("s", key.c_str()), Py_BuildValue("s", value.c_str()));
+        if (pSendData != nullptr && PyCallable_Check(pSendData)) {
+            PyObject* pArgs = PyTuple_Pack(3, Py_BuildValue("s", path.c_str()), Py_BuildValue("s", key.c_str()), Py_BuildValue("O", value ? Py_True : Py_False));
             PyObject_CallObject(pSendData, pArgs);
 
             Py_DECREF(pArgs);

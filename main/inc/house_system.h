@@ -25,11 +25,15 @@
 
 //struct for the sensor flags
 struct sinp_flags{
-    bool motion, door, button;
+    bool motion;
+    bool door;
+    bool button;
 };
 
 struct control_flags{
-    bool relay, sound, live;
+    bool relay;
+    bool sound;
+    bool live;
 };
 
 class houseSystem{

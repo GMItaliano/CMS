@@ -4,6 +4,7 @@
 #include <cerrno>
 #include <cstdio>
 #include <time.h>
+#include <unistd.h>
 
 #define NUMTHREADS  5
 #define CONDSIZE    10
@@ -340,6 +341,7 @@ void* houseSystem::tupdateFlags(void* arg){
                 instance->house_periph.sound = instance->database_periph.sound;
                 control_sound = 1;
                 std::cout << "[ALERT] Value Sound altered" << std::endl;
+                instance->database.send_data("/Control", "Sound", 0);
                 pthread_cond_signal(&instance->cvsound);
 
             }else if(instance->database_periph.live != instance->house_periph.live){
@@ -374,7 +376,7 @@ void* houseSystem::tupdateFlags(void* arg){
                 std::string time_string;
                 struct tm* curr_time;
                 curr_time = localtime(&t);
-                char log_msg[256];
+                char log_msg[512];
                 log_msg[0] = '\0';
                 time_string = '[' + std::string(asctime(curr_time), 0, 24) + ']';
                 strcat(log_msg, time_string.c_str());
@@ -386,8 +388,9 @@ void* houseSystem::tupdateFlags(void* arg){
 
                     if(instance->database_sen.button == 0 && instance->house_sen.button == 1){
                         //Update value to logs when rising trigger 0->1
-                        strcat(log_msg, "\t,Button Pressed");
+                        strcat(log_msg,",");
                         strcat(log_msg,time_string.c_str());
+                        strcat(log_msg, "\tButton Pressed");
                         log_msg[strlen(log_msg)+1] = '\0';
                         std::cout << "[INFO] " << log_msg << std::endl;
                         instance->database.push_data("/Logs", log_msg);
@@ -401,8 +404,9 @@ void* houseSystem::tupdateFlags(void* arg){
 
                     if(instance->database_sen.motion == 0 && instance->house_sen.motion == 1){
                         //Update value to logs when rising trigger 0->1
-                        strcat(log_msg, "\t,Motion Detected");
-                         strcat(log_msg,time_string.c_str());
+                        strcat(log_msg,",");
+                        strcat(log_msg,time_string.c_str());
+                        strcat(log_msg, "\tMotion Detected");
                         log_msg[strlen(log_msg)+1] = '\0';
                         std::cout << "[INFO] " << log_msg << std::endl;
                         instance->database.push_data("/Logs", log_msg);
@@ -416,8 +420,9 @@ void* houseSystem::tupdateFlags(void* arg){
 
                     if(!instance->database_sen.door && instance->house_sen.door){
                         //Update value to logs when rising trigger 0->1
-                        strcat(log_msg, "\t,Door is Open");
+                        strcat(log_msg,",");
                         strcat(log_msg,time_string.c_str());
+                        strcat(log_msg, "\tDoor is Open");
                         log_msg[strlen(log_msg)+1] = '\0';
                         std::cout << "[INFO] " << log_msg << std::endl;
                         instance->database.push_data("/Logs", log_msg);
@@ -573,13 +578,12 @@ void* houseSystem::tsound(void* arg){
         if(!control_sound){
             pthread_cond_wait(&instance->cvsound, &instance->mutsound);
         }else{
-            if(instance->database_periph.sound){
-                std::cout << "[TSOUND] Sound Enabling" << std::endl;
-                instance->livestream.play_audio();
-            }else{
-                std::cout << "[TSOUND] Sound Disabling" << std::endl;
-            }
+            std::cout << "[TSOUND] Sound Enabling" << std::endl;
             control_sound = 0;
+            instance->database_periph.sound = 0;
+            instance->house_periph.sound = 0;
+            instance->livestream.play_audio();
+            std::cout << "[TSOUND] Sound Disabling" << std::endl;
         }
         
         pthread_mutex_unlock(&instance->mutsound);
@@ -595,6 +599,10 @@ void houseSystem::sigHandler(int sig){
 		case SIGINT:
 			exit(0);
 		break;
+        case SIGTERM:
+            system("pidof mainlocal.elf | xargs kill -9");
+            exit(1);
+            break;
 		default:
 			exit(1);
 	}

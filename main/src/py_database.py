@@ -105,12 +105,9 @@ def get_data_path(path):
 
 def set_operation(ref, key, value):         #go to desired location 'ref' , a specified 'key' with the desired 'value'
     
-    #app = firebase_admin.get_app()
-    #cred = credentials.Certificate('database.json')
-    #firebase_admin.initialize_app(cred, {'databaseURL': 'https://cms-rasp-default-rtdb.europe-west1.firebasedatabase.app'})
     refi = db.reference(ref)
     refi.child(key).set(value)
-#   return refi.get()
+
 
 def push_data(path,data):
 

@@ -21,7 +21,7 @@ class database_sys{
         database_sys();
         ~database_sys();
 
-        void send_data(const std::string& path, const std::string& key, const std::string& value);
+        void send_data(const std::string& path, const std::string& key, bool value);
         void push_data(const std::string& path, const std::string& data);
         std::string receive_data(const std::string& path);
         void flags_update(int type, bool state);

@@ -19,7 +19,6 @@
 #define CLASS_NAME "motionClass"
 #define REG_CURRENT_TASK _IOW('a','a',int32_t*)
 
-// #define SIGH 10 	// SIGUSR1
 #define SIGH SIGUSR1
 
 #define IOCTL_PID 1
