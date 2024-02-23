@@ -15,7 +15,6 @@ bool control_relay = 0;
 bool control_sound = 0;
 bool control_live = 0;
 
-//std::string database_data;
 //---------------------------------
 
 //---------- OTHER FUNCTIONS NEEDED -------------
@@ -52,9 +51,6 @@ void SetupThread(int prio, pthread_attr_t *attr, struct sched_param *param){    
     << " using " << param->sched_priority << std::endl;
 
     pthread_attr_setschedparam(attr,param);
-    //pthread_attr_setinheritsched(attr, PTHREAD_EXPLICIT_SCHED);
-    //pthread_attr_setschedpolicy(attr,SCHED_RR);
-
 }
 
 sinp_flags parser_mqueues(std::string data){
@@ -158,12 +154,6 @@ houseSystem::houseSystem() { //: livestream(0)
 
     mq_getattr(msgqueue, &attr_msg);
 
-    /*
-    if(mq_notify(msgqueue,&sig_ev)){        //create the signal for notification
-        std::perror("mq_notify");
-        exit(1);
-    }*/
-
     //initialize sensors database/house/periph
     house_sen.button = 0;
     house_sen.door = 0;
@@ -193,7 +183,6 @@ houseSystem::houseSystem() { //: livestream(0)
     pthread_cond_init(&cvrelay, nullptr);
     pthread_cond_init(&cvsound, nullptr);
     pthread_cond_init(&cvstream, nullptr);
-    //cvsensors = PHREAD_COND_INITIALIZER;
 
     //define Priority & Schedulling
     int policy;
@@ -538,8 +527,6 @@ void* houseSystem::trelay(void* arg){
 
     //CONTROL RELAY
     while(!instance->control_flag){
-
-        //sleep(3);
 
         pthread_mutex_lock(&instance ->mutrelay);    
         
