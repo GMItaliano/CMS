@@ -56,8 +56,6 @@ database_sys::database_sys() {
         } else {
             fprintf(stderr, "Function 'innit_database' not found in the Python module.\n");
         }
-
-        // Your existing code for calling Python functions goes here
     }
 }
 
@@ -178,7 +176,7 @@ void database_sys::download_audio() {
         PyObject* pDownload_latest_audio = PyObject_GetAttrString(this->pModule, "download_latest_audio");
 
         if (pDownload_latest_audio != nullptr && PyCallable_Check(pDownload_latest_audio)) {
-            // Call the download_audio_wrapper function with appropriate arguments
+            // Call the download_audio_wrapper 
             PyObject* pArgs = PyTuple_Pack(0);
             PyObject* pResult = PyObject_CallObject(pDownload_latest_audio, pArgs);
 
