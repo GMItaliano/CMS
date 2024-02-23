@@ -32,3 +32,4 @@ The overarching goals of this project include:
     Compact and Discrete Design: Minimizes the impact on house interior design.
 
 For a more comprehensive understanding, please refer to the Project Report. Feel free to explore the report for a detailed analysis of the project's development and implementation.
+Also the CmakeLists.txt also displays 2 different ways to compile the project one for the Raspberry pi 4B and the other to run in Linux.
