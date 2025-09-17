@@ -1,35 +1,68 @@
-# Communication and Monitoring System for people with Alzheimer and Dementia
-Table of Contents
+# KUKA 7-DOF Industrial Robot Simulation
 
-    Problem Statement
-    Goals
-    Overview
-    Key Features
+A robotics simulation environment implementing a KUKA 7-degree-of-freedom manipulator with computer vision capabilities for automated pick-and-place operations in industrial applications.
 
-## 1. Problem Statement<a name="problem-statement"></a>
+## Technical Overview
 
-The project aims to address the safety concerns of individuals with Alzheimer’s and Dementia by implementing advanced security systems. These systems will promptly alert caregivers to unusual occurrences during moments of solitude, providing caregivers with increased flexibility in their schedules while ensuring the well-being of those under their care. Additionally, the project empowers individuals with Alzheimer’s and Dementia to feel more independent while remaining safe.
+This project implements forward/inverse kinematics algorithms, computer vision-based object detection, and autonomous manipulation strategies for a KUKA robot mounted on a mobile platform. The system integrates machine learning models for object classification and real-time path planning algorithms.
 
-For a more detailed explanation, please refer to the Project Report.
+**Core Features:**
+- Forward & inverse kinematics solver for 7-DOF manipulator
+- Vision-based object detection and classification using TensorFlow
+- Automated stock management system
+- Real-time trajectory planning and control
+- CoppeliaSim integration for physics-based simulation
 
-## 2. Goals<a name="goals"></a>
+## Project Purpose & Methodology
 
-The overarching goals of this project include:
+### Why This Project Exists
+This simulation demonstrates Industry 4.0 concepts by integrating robotics, computer vision, and intelligent automation in a retail/warehouse environment. It serves as a proof-of-concept for autonomous robotic systems that can:
+- Identify and classify objects using machine learning
+- Make intelligent decisions based on visual feedback
+- Execute precise manipulation tasks without human intervention
+- Manage inventory in real-time
 
-    Apply knowledge gained from prior curriculum units
-    Reinforce understanding of embedded systems specialization
-    Explore fresh concepts within the realm of embedded technology
-    Ensure the development of a reliable system
-    Build a compact and discrete system to minimize its influence on house interior design
-    Explore a market niche believed to be overlooked by other companies
-    
-## 4. Key Features<a name="key-features"></a>
+### How It Works
+1. **Vision Pipeline**: Camera captures workspace images → Python ML model classifies objects (CanTypeA/CanTypeB) → Coordinates sent to MATLAB
+2. **Motion Planning**: MATLAB calculates inverse kinematics → Generates collision-free trajectories → Sends joint commands via Remote API
+3. **Execution Loop**: Robot moves to target → Grasps object → Places in designated location → Updates inventory database
+4. **Feedback Control**: Real-time position feedback ensures precision and error correction
 
-    Real-time Alerts: Receive prompt notifications about unusual occurrences.
-    Flexibility for Caregivers: Allows caregivers to have increased flexibility in their schedules.
-    Independence for Individuals: Empowers individuals with Alzheimer’s and Dementia to feel more independent.
-    Reliable System: Ensures the development of a reliable and robust security system.
-    Compact and Discrete Design: Minimizes the impact on house interior design.
+### What It Demonstrates
+- **Autonomous Decision Making**: Robot selects appropriate actions based on object classification
+- **Human-Robot Collaboration**: Safe operation in shared workspaces with predictable behavior
+- **Scalable Architecture**: Modular design allows easy integration of new object types and behaviors
+- **Industry 4.0 Integration**: Combines IoT sensors, ML algorithms, and robotic automation
 
-For a more comprehensive understanding, please refer to the Project Report. Feel free to explore the report for a detailed analysis of the project's development and implementation.
-Also the CmakeLists.txt also displays 2 different ways to compile the project one for the Raspberry pi 4B and the other to run in Linux.
+## Tech Stack
+
+| Component | Technology |
+|-----------|------------|
+| **Simulation Engine** | CoppeliaSim (`.ttt` scene files) |
+| **Control System** | MATLAB/Simulink + Robotics Toolbox |
+| **Computer Vision** | Python + TensorFlow/Keras |
+| **Image Processing** | OpenCV, NumPy |
+| **API Interface** | Remote API (remApi) |
+| **Kinematics** | Custom MATLAB implementation |
+
+## Quick Start
+
+```bash
+# Prerequisites: MATLAB R2020b+, CoppeliaSim, Python 3.8+
+1. Open CoppeliaSim and load: CaseStudy2_SmartRetail_Kuka7dof.ttt
+2. Run MATLAB: main_program.m
+3. For vision training: cd Vision_ML && python datasetgeneration.py
+```
+
+## System Architecture
+
+```
+├── main_program.m          # Main control loop
+├── arm_Kinematics.m        # Kinematics calculations
+├── vision.m                # Vision processing interface
+├── pick_n_place.m          # Manipulation algorithms
+├── Stock_Manager.m         # Inventory management
+└── Vision_ML/              # ML models & training scripts
+    ├── sai.py              # TensorFlow classification model
+    └── inference.py        # Real-time inference
+```
