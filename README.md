@@ -1,68 +1,75 @@
-# KUKA 7-DOF Industrial Robot Simulation
+# Communication and Monitoring System for People with Alzheimer and Dementia
 
-A robotics simulation environment implementing a KUKA 7-degree-of-freedom manipulator with computer vision capabilities for automated pick-and-place operations in industrial applications.
+## Table of Contents
+- [Problem Statement](#problem-statement)
+- [Goals](#goals)
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Technical Overview](#technical-overview)
+- [Tech Stack](#tech-stack)
 
-## Technical Overview
+## 1. Problem Statement<a name="problem-statement"></a>
 
-This project implements forward/inverse kinematics algorithms, computer vision-based object detection, and autonomous manipulation strategies for a KUKA robot mounted on a mobile platform. The system integrates machine learning models for object classification and real-time path planning algorithms.
+The project addresses the safety and autonomy of individuals with Alzheimer’s and Dementia by implementing an advanced, real-time security and monitoring system. The system is designed to promptly alert caregivers to unusual or potentially dangerous events, especially when individuals are alone. This solution aims to provide peace of mind and flexibility for caregivers, while empowering those under care to maintain a sense of independence within a safe environment.
 
-**Core Features:**
-- Forward & inverse kinematics solver for 7-DOF manipulator
-- Vision-based object detection and classification using TensorFlow
-- Automated stock management system
-- Real-time trajectory planning and control
-- CoppeliaSim integration for physics-based simulation
+For a more detailed explanation, please refer to the Project Report.
 
-## Project Purpose & Methodology
+## 2. Goals<a name="goals"></a>
 
-### Why This Project Exists
-This simulation demonstrates Industry 4.0 concepts by integrating robotics, computer vision, and intelligent automation in a retail/warehouse environment. It serves as a proof-of-concept for autonomous robotic systems that can:
-- Identify and classify objects using machine learning
-- Make intelligent decisions based on visual feedback
-- Execute precise manipulation tasks without human intervention
-- Manage inventory in real-time
+The overarching goals of this project include:
+- Apply knowledge gained from prior curriculum units
+- Reinforce understanding of embedded systems specialization
+- Explore new concepts within embedded technology
+- Ensure the development of a reliable, fault-tolerant system
+- Build a compact and discrete system to minimize its impact on home aesthetics
+- Address a market niche overlooked by mainstream solutions
 
-### How It Works
-1. **Vision Pipeline**: Camera captures workspace images → Python ML model classifies objects (CanTypeA/CanTypeB) → Coordinates sent to MATLAB
-2. **Motion Planning**: MATLAB calculates inverse kinematics → Generates collision-free trajectories → Sends joint commands via Remote API
-3. **Execution Loop**: Robot moves to target → Grasps object → Places in designated location → Updates inventory database
-4. **Feedback Control**: Real-time position feedback ensures precision and error correction
+## 3. Overview<a name="overview"></a>
 
-### What It Demonstrates
-- **Autonomous Decision Making**: Robot selects appropriate actions based on object classification
-- **Human-Robot Collaboration**: Safe operation in shared workspaces with predictable behavior
-- **Scalable Architecture**: Modular design allows easy integration of new object types and behaviors
-- **Industry 4.0 Integration**: Combines IoT sensors, ML algorithms, and robotic automation
+This project is a comprehensive embedded system integrating multiple hardware and software components to monitor, detect, and report events in a residential environment. The system leverages sensors (motion, magnetic, button, relay, LED) interfaced via custom device drivers, and a central daemon for data aggregation and event handling. The architecture is modular, supporting deployment on both Raspberry Pi 4B and standard Linux environments, and is designed for extensibility and maintainability. The solution emphasizes robustness, low-latency alerting, and ease of integration with existing home infrastructure.
 
-## Tech Stack
+## 4. Key Features<a name="key-features"></a>
 
-| Component | Technology |
-|-----------|------------|
-| **Simulation Engine** | CoppeliaSim (`.ttt` scene files) |
-| **Control System** | MATLAB/Simulink + Robotics Toolbox |
-| **Computer Vision** | Python + TensorFlow/Keras |
-| **Image Processing** | OpenCV, NumPy |
-| **API Interface** | Remote API (remApi) |
-| **Kinematics** | Custom MATLAB implementation |
+- **Real-time Alerts:** Immediate notifications for abnormal or hazardous events.
+- **Caregiver Flexibility:** Enables remote monitoring and flexible scheduling for caregivers.
+- **User Independence:** Supports autonomy for individuals with cognitive impairments.
+- **Robustness:** Designed for high reliability and fault tolerance.
+- **Compact, Discrete Design:** Minimal impact on home interior and daily life.
+- **Modular Architecture:** Easily extendable for additional sensors or features.
 
-## Quick Start
+## 5. Technical Overview<a name="technical-overview"></a>
 
-```bash
-# Prerequisites: MATLAB R2020b+, CoppeliaSim, Python 3.8+
-1. Open CoppeliaSim and load: CaseStudy2_SmartRetail_Kuka7dof.ttt
-2. Run MATLAB: main_program.m
-3. For vision training: cd Vision_ML && python datasetgeneration.py
-```
+The system consists of the following main components:
+- **Embedded Device Drivers:** Custom Linux kernel modules for interfacing with motion, magnetic, button, relay, and LED hardware.
+- **Central Daemon:** A C++ service responsible for sensor data collection, event processing, and alert dispatching.
+- **Database Integration:** Local or remote database support for event logging and historical analysis.
+- **Python Integration:** Python scripts for database management and potential AI/ML extensions.
+- **Build System:** CMake-based build configuration supporting both Raspberry Pi 4B and generic Linux targets.
 
-## System Architecture
+The architecture ensures separation of concerns, with clear interfaces between hardware abstraction, core logic, and external integrations.
 
-```
-├── main_program.m          # Main control loop
-├── arm_Kinematics.m        # Kinematics calculations
-├── vision.m                # Vision processing interface
-├── pick_n_place.m          # Manipulation algorithms
-├── Stock_Manager.m         # Inventory management
-└── Vision_ML/              # ML models & training scripts
-    ├── sai.py              # TensorFlow classification model
-    └── inference.py        # Real-time inference
-```
+## 6. Tech Stack<a name="tech-stack"></a>
+
+**Hardware:**
+- Raspberry Pi 4B (primary target)
+- Standard Linux PC (development/testing)
+- Motion, magnetic, button, relay, and LED sensors
+
+**Software:**
+- C++ (core logic, daemon)
+- C (Linux kernel modules/device drivers)
+- Python (database management, scripting)
+- Bash (build and deployment scripts)
+
+**Frameworks & Tools:**
+- Linux Kernel (module development)
+- CMake (build system)
+- GCC/G++ (compilation)
+- Firebase (database, configurable)
+- Git (version control)
+
+**Deployment:**
+- Supports both Raspberry Pi OS and standard Linux distributions
+- Modular build options in `CMakeLists.txt` for target selection
+
+For a more comprehensive understanding, please refer to the Project Report. Feel free to explore the report for a detailed analysis of the project's development and implementation.
